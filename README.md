@@ -9,4 +9,5 @@ For testing purposes an simple backend is added.
 - Build Express backend to upload any filetype
 - Build Web UI for dropzone
 -- Technology can be determined later: React, Angular, Plain old JS, TS.
+(-- Provide Postman files for testing backend.)
 -- Write steps to run project.
