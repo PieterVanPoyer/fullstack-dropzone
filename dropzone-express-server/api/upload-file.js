@@ -1,11 +1,37 @@
-var express = require('express');
+const express = require('express');
 const formidable = require('formidable');
-var router = express.Router();
+const router = express.Router();
+const fs = require('fs');
 
 /* Post file upload. */
 router.get('/', function (req, res, next) {
     console.log('get uploaded files');
-    res.send('get uploaded files');
+    fs.readdir(__dirname + '/uploads/', (err, files) => {
+        const readFiles = [];
+        let randomBytes = 500;
+        files.forEach(file => {
+            readFiles.push({
+                id: file,
+                fileName: file,
+                fileType: 'unknown',
+                canBeDeleted: true,
+                canBeDownloaded: true,
+                fileSizeInBytes: randomBytes
+            });
+            randomBytes = randomBytes * 2;
+        });
+        console.log(readFiles);
+        res.send(readFiles);
+    });
+});
+
+router.get('/:name', function (req, res, next) {
+    console.log('get uploaded files for name',  req.params.name, __dirname);
+
+    const file = __dirname + '/uploads/' + req.params.name;
+    res.download(file); // Set disposition and send it.
+
+    /// res.send('get uploaded files for name');
 });
 
 /* Post file upload. */

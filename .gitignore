@@ -1,0 +1,5 @@
+**/node_modules/*
+dropzone-express-server/api/uploads/**
+**.iml
+.idea/*
+dropzone-express-server/bin/*

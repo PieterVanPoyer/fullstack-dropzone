@@ -1,0 +1,95 @@
+.m-dropzone {
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px dashed #e4e7ed;
+
+  &.m-dropzone--drag-in-progress {
+    background: #00CC71;
+  }
+}
+
+.m-dropzone__anchor-browse {
+  color: #0088cc;
+
+  &:hover {
+    cursor: pointer;
+    border-bottom: 1px solid #0088cc;
+  }
+}
+
+.m-dropzone__text {
+  text-align: center;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.m-dropzone__output-container {
+  display: flex;
+}
+
+.m-dropzone-output-element__bottom-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.m-dropzone-output-element {
+  margin: 4px;
+
+  &.m-dropzone-output-element--is-download-enabled {
+    .m-dropzone-output-element__file-name {
+      &:hover {
+        cursor: pointer;
+        border-bottom: 1px solid #0088cc;
+      }
+    }
+
+    .m-dropzone-output-element__file-icon {
+      &:hover {
+        cursor: pointer;
+        background-color: #f1f1f191;
+      }
+    }
+  }
+
+  &.m-dropzone-output-element--is-deletable:hover {
+
+    .m-dropzone-output-element__delete-button {
+      cursor: pointer;
+      display: block;
+      padding: 4px;
+    }
+  }
+
+  &.m-dropzone-output-element--delete-in-progress {
+    .m-dropzone-output-element__delete-button {
+      cursor: default;
+      pointer-events: none;
+      opacity: 0.4;
+    }
+  }
+}
+
+.m-dropzone-output-element__delete-button {
+  display: none;
+  font-size: 18px;
+}
+
+.m-dropzone-output-element__file-icon {
+  min-width: 180px;
+  min-height: 145px;
+  border: 1px solid #e4e7ed;
+  font-size: 150px;
+  text-align: center;
+  color: #0088cc;
+}
+
+.m-dropzone-output-element__file-name {
+  color: #0088cc;
+}
+
+.m-dropzone-output-element__size {
+  display: block;
+  flex-grow: 1;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}

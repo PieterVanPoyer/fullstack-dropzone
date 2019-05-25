@@ -1,0 +1,40 @@
+@import "variables";
+
+@font-face {
+  font-family: '#{$dropzone-font-family}';
+  src:  url('#{$dropzone-font-path}/#{$dropzone-font-family}.eot?ic6xow');
+  src:  url('#{$dropzone-font-path}/#{$dropzone-font-family}.eot?ic6xow#iefix') format('embedded-opentype'),
+    url('#{$dropzone-font-path}/#{$dropzone-font-family}.woff2?ic6xow') format('woff2'),
+    url('#{$dropzone-font-path}/#{$dropzone-font-family}.ttf?ic6xow') format('truetype'),
+    url('#{$dropzone-font-path}/#{$dropzone-font-family}.woff?ic6xow') format('woff'),
+    url('#{$dropzone-font-path}/#{$dropzone-font-family}.svg?ic6xow##{$dropzone-font-family}') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="dropzone-"], [class*=" dropzone-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: '#{$dropzone-font-family}' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.dropzone-file {
+  &:before {
+    content: $dropzone-file;
+  }
+}
+.dropzone-delete-file {
+  &:before {
+    content: $dropzone-delete-file;
+  }
+}
+
