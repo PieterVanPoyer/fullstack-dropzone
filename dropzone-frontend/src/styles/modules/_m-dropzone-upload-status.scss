@@ -1,0 +1,30 @@
+.m-dropzone-upload-status {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: $dropzone-upload-status-background-color;
+  opacity: 0.9;
+  pointer-events: none;
+  display: none;
+
+  &.m-dropzone-upload-status--is-in-progress {
+    display: block;
+  }
+
+  &.m-dropzone-upload-status--has-upload-error {
+    display: block;
+  }
+}
+
+.m-dropzone-upload-status__progress, .m-dropzone-upload-status__upload-error {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+}
+
+.m-dropzone-upload-status__upload-error {
+  color: $dropzone-upload-status-error-color;
+}

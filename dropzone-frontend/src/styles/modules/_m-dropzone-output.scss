@@ -1,0 +1,97 @@
+.m-dropzone-output__bottom-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.m-dropzone-output {
+  margin: 4px;
+  max-width: $dropzone-output-max-width;
+  display: flex;
+  flex-direction: column;
+
+  &.m-dropzone-output--is-download-enabled {
+    .m-dropzone-output__file-name {
+      &:hover {
+        cursor: pointer;
+        border-bottom: $dropzone-file-name-hover-border-bottom;
+      }
+    }
+
+    .m-dropzone-output__file-icon {
+      &:hover {
+        cursor: pointer;
+        background-color: $dropzone-file-icon-background-color;
+      }
+    }
+  }
+
+  &.m-dropzone-output--is-deletable:hover {
+
+    .m-dropzone-output__delete-button {
+      cursor: pointer;
+      display: block;
+      padding: 4px;
+    }
+  }
+
+  &.m-dropzone-output--delete-in-progress {
+    .m-dropzone-output__delete-button {
+      cursor: default;
+      pointer-events: none;
+      opacity: 0.4;
+    }
+  }
+
+  &.m-dropzone-output--with-thumbail {
+    .m-dropzone-output__file-icon {
+      display: none;
+    }
+
+    .m-dropzone-output__thumbnail-container {
+      display: block;
+    }
+  }
+
+}
+
+.m-dropzone-output__delete-button {
+  display: none;
+  font-size: 18px;
+}
+
+.m-dropzone-output__file-icon {
+  min-width: $dropzone-file-icon-min-width;
+  min-height: $dropzone-file-icon-min-height;
+  border: $dropzone-file-icon-border;
+  font-size: 150px;
+  text-align: center;
+  color: $dropzone-file-icon-color;
+}
+
+.m-dropzone-output__thumbnail-container {
+  min-width: $dropzone-thumbnail-container-min-width;
+  min-height: $dropzone-thumbnail-container-min-height;
+  border: $dropzone-thumbnail-container-border;
+  text-align: center;
+  display: none;
+}
+
+.m-dropzone-output__thumbnail-img {
+  max-width: $dropzone-thumbnail-img-max-width;
+  max-height: $dropzone-thumbnail-img-max-height;
+  cursor: pointer;
+}
+
+.m-dropzone-output__file-name {
+  color: $dropzone-file-name-color;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.m-dropzone-output__size {
+  display: block;
+  flex-grow: 1;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
