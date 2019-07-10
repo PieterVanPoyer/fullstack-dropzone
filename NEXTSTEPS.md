@@ -8,7 +8,7 @@
 - build angular integration
 - publish on npm
 - other icon (see design!)
-- scss 2 modules and variables
+- ~~scss 2 modules and variables~~
 
 # Next steps?
 

@@ -12,11 +12,11 @@ export class DropzoneFileElement extends EventsEmitter {
     constructor(protected dropzoneFile: DropzoneFile, protected i18nResource: DropzoneI18nResource) {
         super();
         this.element = document.createElement('div');
-        this.element.classList.add('m-dropzone-file-element');
+        this.element.classList.add('m-dropzone-file');
         this.outputElement = document.createElement('div');
-        this.outputElement.classList.add('m-dropzone-output-element');
+        this.outputElement.classList.add('m-dropzone-output');
         this.uploadStatusElement = document.createElement('div');
-        this.uploadStatusElement.classList.add('m-dropzone-upload-status-element');
+        this.uploadStatusElement.classList.add('m-dropzone-upload-status');
         this.element.appendChild(this.outputElement);
         this.element.appendChild(this.uploadStatusElement);
         this.initHtml();
@@ -51,22 +51,22 @@ export class DropzoneFileElement extends EventsEmitter {
     }
 
     markAsDeleteInProgress(): void {
-        this.outputElement.classList.add('m-dropzone-output-element--delete-in-progress');
+        this.outputElement.classList.add('m-dropzone-output--delete-in-progress');
     }
 
     private initHtml(): void {
-        this.outputElement.innerHTML = `<div class="js-dropzone-output-element-start-download m-dropzone-output-element__file-icon dropzone-file"></div>
-                        <div class="js-dropzone-output-element-thumbnail-container js-dropzone-output-element-start-download m-dropzone-output-element__thumbnail-container"></div>
-                        <a class="js-dropzone-output-element-start-download m-dropzone-output-element__file-name">${this.dropzoneFile.fileName}</a>
-                        <div class="m-dropzone-output-element__bottom-container"><span class="m-dropzone-output-element__size">${this.convertSizeToReadableFormat()}</span>
-                           <a class="js-dropzone-output-element-start-delete m-dropzone-output-element__delete-button dropzone-delete-file"></a>
+        this.outputElement.innerHTML = `<div class="js-dropzone-output-start-download m-dropzone-output__file-icon dropzone-file"></div>
+                        <div class="js-dropzone-output-thumbnail-container js-dropzone-output-start-download m-dropzone-output__thumbnail-container"></div>
+                        <a class="js-dropzone-output-start-download m-dropzone-output__file-name">${this.dropzoneFile.fileName}</a>
+                        <div class="m-dropzone-output__bottom-container"><span class="m-dropzone-output__size">${this.convertSizeToReadableFormat()}</span>
+                           <a class="js-dropzone-output-start-delete m-dropzone-output__delete-button dropzone-delete-file"></a>
                         </div>`;
 
         if (!!this.dropzoneFile.thumbnailUrl) {
-            this.outputElement.querySelector('.js-dropzone-output-element-thumbnail-container').innerHTML = '<img class="m-dropzone-output-element__thumbnail-img" src="' + this.dropzoneFile.thumbnailUrl + '" />';
-            this.outputElement.classList.add('m-dropzone-output-element--with-thumbail');
+            this.outputElement.querySelector('.js-dropzone-output-thumbnail-container').innerHTML = '<img class="m-dropzone-output__thumbnail-img" src="' + this.dropzoneFile.thumbnailUrl + '" />';
+            this.outputElement.classList.add('m-dropzone-output--with-thumbail');
         } else {
-            this.outputElement.classList.remove('m-dropzone-output-element--with-thumbail');
+            this.outputElement.classList.remove('m-dropzone-output--with-thumbail');
         }
 
         if (this.dropzoneFile.canBeDownloaded) {
@@ -92,7 +92,7 @@ export class DropzoneFileElement extends EventsEmitter {
     }
 
     handleDeleteCompleted(): void {
-        this.outputElement.classList.remove('m-dropzone-output-element--delete-in-progress');
+        this.outputElement.classList.remove('m-dropzone-output--delete-in-progress');
         this.destroy();
     }
 
@@ -102,17 +102,17 @@ export class DropzoneFileElement extends EventsEmitter {
         this.initHtml();
 
         setTimeout(() => {
-            this.uploadStatusElement.innerHTML = `<span class="m-dropzone-upload-status-element__progress">${this.i18nResource.uploadCompleteLabel}</span>`;
+            this.uploadStatusElement.innerHTML = `<span class="m-dropzone-upload-status__progress">${this.i18nResource.uploadCompleteLabel}</span>`;
             setTimeout(() => {
-                this.uploadStatusElement.classList.remove('m-dropzone-upload-status-element--is-in-progress');
+                this.uploadStatusElement.classList.remove('m-dropzone-upload-status--is-in-progress');
             }, 1000)
         }, 500);
 
     }
 
     private makeDownloadable() {
-        this.outputElement.classList.add('m-dropzone-output-element--is-download-enabled');
-        this.outputElement.querySelectorAll('.js-dropzone-output-element-start-download').forEach((element) => {
+        this.outputElement.classList.add('m-dropzone-output--is-download-enabled');
+        this.outputElement.querySelectorAll('.js-dropzone-output-start-download').forEach((element) => {
             element.addEventListener('click', (event) => {
                 event.preventDefault();
                 event.stopPropagation();
@@ -122,9 +122,9 @@ export class DropzoneFileElement extends EventsEmitter {
     }
 
     private makeDeletable() {
-        this.outputElement.classList.add('m-dropzone-output-element--is-deletable');
+        this.outputElement.classList.add('m-dropzone-output--is-deletable');
         this.unmarkDeleteInProgress();
-        this.outputElement.querySelector('.js-dropzone-output-element-start-delete').addEventListener('click', (event) => {
+        this.outputElement.querySelector('.js-dropzone-output-start-delete').addEventListener('click', (event) => {
             event.preventDefault();
             event.stopPropagation();
             this.emit(DropzoneEvents.DELETE_FILE, this.dropzoneFile);
@@ -132,16 +132,16 @@ export class DropzoneFileElement extends EventsEmitter {
     }
 
     handleUploadError(error: any): void {
-        this.uploadStatusElement.classList.add('m-dropzone-upload-status-element--has-upload-error');
-        this.uploadStatusElement.innerHTML = `<span class="m-dropzone-upload-status-element__upload-error">${this.i18nResource.uploadErrorLabel}</span>`;
+        this.uploadStatusElement.classList.add('m-dropzone-upload-status--has-upload-error');
+        this.uploadStatusElement.innerHTML = `<span class="m-dropzone-upload-status__upload-error">${this.i18nResource.uploadErrorLabel}</span>`;
         setTimeout(() => {
             this.emit(DropzoneEvents.REMOVE_DROPZONE_FILE_ELEMENT);
         }, 6000);
     }
 
     handleUploadProgress(uploadPercentage:number):void {
-        this.uploadStatusElement.classList.add('m-dropzone-upload-status-element--is-in-progress');
-        this.uploadStatusElement.innerHTML = `<span class="m-dropzone-upload-status-element__progress">${this.i18nResource.uploadProgressLabel} ' + uploadPercentage + '%</span>`;
+        this.uploadStatusElement.classList.add('m-dropzone-upload-status--is-in-progress');
+        this.uploadStatusElement.innerHTML = `<span class="m-dropzone-upload-status__progress">${this.i18nResource.uploadProgressLabel} ' + uploadPercentage + '%</span>`;
     }
 
     handleDeleteError(error: any): void {
@@ -149,7 +149,7 @@ export class DropzoneFileElement extends EventsEmitter {
     }
 
     private unmarkDeleteInProgress() {
-        this.outputElement.classList.remove('m-dropzone-output-element--delete-in-progress');
+        this.outputElement.classList.remove('m-dropzone-output--delete-in-progress');
     }
 
     getElement(): HTMLDivElement {

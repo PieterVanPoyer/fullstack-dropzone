@@ -1,10 +1,10 @@
 .m-dropzone {
   padding: 16px;
   border-radius: 8px;
-  border: 1px dashed #e4e7ed;
+  border: $dropzone-border;
 
   &.m-dropzone--drag-in-progress {
-    background: #00CC71;
+    background: $dropzone-drag-in-progress-color;
   }
 
   &.m-dropzone--is-readonly {
@@ -14,18 +14,18 @@
 
 
 
-    .m-dropzone-output-element.m-dropzone-output-element--is-deletable:hover .m-dropzone-output-element__delete-button {
+    .m-dropzone-output.m-dropzone-output--is-deletable:hover .m-dropzone-output__delete-button {
       display: none;
     }
   }
 }
 
 .m-dropzone__anchor-browse {
-  color: #0088cc;
+  color: $dropzone-anchor-color;
 
   &:hover {
     cursor: pointer;
-    border-bottom: 1px solid #0088cc;
+    border-bottom: $dropzone-anchor-hover-border-bottom;
   }
 }
 
@@ -38,137 +38,4 @@
 .m-dropzone__output-container {
   display: flex;
   flex-wrap: wrap;
-}
-
-.m-dropzone-output-element__bottom-container {
-  display: flex;
-  flex-direction: row;
-}
-
-.m-dropzone-output-element {
-  margin: 4px;
-  max-width: 200px;
-  display: flex;
-  flex-direction: column;
-
-  &.m-dropzone-output-element--is-download-enabled {
-    .m-dropzone-output-element__file-name {
-      &:hover {
-        cursor: pointer;
-        border-bottom: 1px solid #0088cc;
-      }
-    }
-
-    .m-dropzone-output-element__file-icon {
-      &:hover {
-        cursor: pointer;
-        background-color: #f1f1f191;
-      }
-    }
-  }
-
-  &.m-dropzone-output-element--is-deletable:hover {
-
-    .m-dropzone-output-element__delete-button {
-      cursor: pointer;
-      display: block;
-      padding: 4px;
-    }
-  }
-
-  &.m-dropzone-output-element--delete-in-progress {
-    .m-dropzone-output-element__delete-button {
-      cursor: default;
-      pointer-events: none;
-      opacity: 0.4;
-    }
-  }
-
-  &.m-dropzone-output-element--with-thumbail {
-    .m-dropzone-output-element__file-icon {
-      display: none;
-    }
-
-    .m-dropzone-output-element__thumbnail-container {
-      display: block;
-    }
-  }
-
-}
-
-.m-dropzone-output-element__delete-button {
-  display: none;
-  font-size: 18px;
-}
-
-.m-dropzone-output-element__file-icon {
-  min-width: 180px;
-  min-height: 145px;
-  border: 1px solid #e4e7ed;
-  font-size: 150px;
-  text-align: center;
-  color: #0088cc;
-}
-
-.m-dropzone-output-element__thumbnail-container {
-  min-width: 180px;
-  min-height: 145px;
-  border: 1px solid #e4e7ed;
-  text-align: center;
-  display: none;
-}
-
-.m-dropzone-output-element__thumbnail-img {
-  max-width: 180px;
-  max-height: 145px;
-  cursor: pointer;
-}
-
-.m-dropzone-output-element__file-name {
-  color: #0088cc;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-.m-dropzone-output-element__size {
-  display: block;
-  flex-grow: 1;
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-.m-dropzone-file-element {
-  position: relative;
-}
-
-.m-dropzone-upload-status-element {
-  position: absolute;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: white;
-  opacity: 0.9;
-  pointer-events: none;
-  display: none;
-
-  &.m-dropzone-upload-status-element--is-in-progress {
-    display: block;
-  }
-
-  &.m-dropzone-upload-status-element--has-upload-error {
-    display: block;
-  }
-}
-
-.m-dropzone-upload-status-element__progress, .m-dropzone-upload-status-element__upload-error {
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  white-space: nowrap;
-}
-
-.m-dropzone-upload-status-element__upload-error {
-  color: red;
 }
