@@ -1,22 +1,69 @@
-import { DropzoneFileElement } from './dropzone-file-element';
-import { DropzoneFile } from './model/dropzone-file';
+import {DropzoneFileElement} from './dropzone-file-element';
+import {DropzoneFile} from './model/dropzone-file';
 import EventsEmitter from './event-emitter';
-import { DropzoneEvents } from './dropzone-events';
+import {DropzoneEvents} from './dropzone-events';
+import {DefaultI18nResource, DropzoneI18nResource} from "./model/dropzone-i18n";
 
 export class Dropzone extends EventsEmitter {
 
-    static DROPZON_FILE_ID: number = 1;
+    static DROPZONE_FILE_ID: number = 1;
+
+    protected dragoverListener = (e: DragEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.element.classList.add('m-dropzone--drag-in-progress');
+    };
+
+    protected dragleaveListener = (e: DragEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.element.classList.remove('m-dropzone--drag-in-progress');
+    };
+
+    protected dropListener = (e: DragEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.element.classList.remove('m-dropzone--drag-in-progress');
+        this.triggerCallback(e);
+    };
+
+    protected browseButtonClickListener = () => {
+        this.fileInput.value = null;
+        this.fileInput.click();
+    };
 
     private outputDiv: HTMLDivElement;
     private filesForOutput: DropzoneFileElement[] = [];
+    private readonly: boolean = false;
+    private fileInput: HTMLInputElement;
 
-    constructor(private element: HTMLElement) {
+    constructor(protected element: HTMLElement, protected i18nResources: DropzoneI18nResource = new DefaultI18nResource()) {
         super();
         this.makeDroppable();
         this.addOutputContainer();
     }
 
-    addOnFileDroppedEventListener(listener: (dropzoneFile: DropzoneFile, successCallback: (createdDropzoneFile: DropzoneFile) => any | void, errorCallback: Function) => void): void {
+    setReadonly(readonly: boolean): void {
+        this.readonly = readonly;
+        if (this.readonly) {
+            this.applyReadonlyState();
+        } else {
+            this.applyWritableState();
+        }
+    }
+
+    private applyReadonlyState(): void {
+        this.element.classList.add('m-dropzone--is-readonly');
+        this.removeDragAndDropEventListeners();
+    }
+
+    private applyWritableState(): void {
+        this.element.classList.remove('m-dropzone--is-readonly');
+        this.addDragAndDropEventListeners();
+    }
+
+    addOnFileDroppedEventListener(listener: (dropzoneFile: DropzoneFile, successCallback: (createdDropzoneFile: DropzoneFile) => any | void, errorCallback: Function,
+                                             progressCallback: (uploadPercentage: number) => void) => void): void {
         this.on(DropzoneEvents.ON_FILE_DROPPED, listener);
     }
 
@@ -28,41 +75,44 @@ export class Dropzone extends EventsEmitter {
         this.on(DropzoneEvents.DELETE_FILE, listener);
     }
 
+    public destroy(): void {
+        this.clearInnerHtml();
+        this.off(DropzoneEvents.ON_FILE_DROPPED);
+        this.off(DropzoneEvents.DOWNLOAD_FILE);
+        this.off(DropzoneEvents.DELETE_FILE);
+    }
+
+    private clearInnerHtml() {
+        this.outputDiv.innerHTML = null;
+    }
+
     protected makeDroppable(): void {
-        const input = document.createElement('input');
-        input.setAttribute('type', 'file');
-        input.setAttribute('multiple', 'true');
-        input.style.display = 'none';
-        input.addEventListener('change', (e) => {
+        this.fileInput = document.createElement('input');
+        this.fileInput.setAttribute('type', 'file');
+        this.fileInput.setAttribute('multiple', 'true');
+        this.fileInput.style.display = 'none';
+        this.fileInput.addEventListener('change', (e) => {
             this.triggerCallback(e);
         });
 
-        this.element.appendChild(input);
-        this.element.innerHTML += '<span class="m-dropzone__text"><span class="m-dropzone__drop-icon"> </span> Drop files to attach, or <a class="js-dropzone-browse-button m-dropzone__anchor-browse"> browse.</a></span>'
+        this.element.appendChild(this.fileInput);
+        this.element.innerHTML += `<span class="m-dropzone__text"><span class="m-dropzone__drop-icon"> </span> ${this.i18nResources.dropFilesLabel} <a class="js-dropzone-browse-button m-dropzone__anchor-browse"> ${this.i18nResources.browseLabel}</a></span>`;
 
-        this.element.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            this.element.classList.add('m-dropzone--drag-in-progress');
-        });
+        this.addDragAndDropEventListeners();
+    }
 
-        this.element.addEventListener('dragleave', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            this.element.classList.remove('m-dropzone--drag-in-progress');
-        });
+    private addDragAndDropEventListeners(): void {
+        this.element.addEventListener('dragover', this.dragoverListener);
+        this.element.addEventListener('dragleave', this.dragleaveListener);
+        this.element.addEventListener('drop', this.dropListener);
+        this.element.querySelector('.js-dropzone-browse-button').addEventListener('click', this.browseButtonClickListener);
+    }
 
-        this.element.addEventListener('drop', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            this.element.classList.remove('m-dropzone--drag-in-progress');
-            this.triggerCallback(e);
-        });
-
-        this.element.querySelector('.js-dropzone-browse-button').addEventListener('click', () => {
-            input.value = null;
-            input.click();
-        });
+    protected removeDragAndDropEventListeners(): void {
+        this.element.removeEventListener('dragover', this.dragoverListener);
+        this.element.removeEventListener('dragleave', this.dragleaveListener);
+        this.element.removeEventListener('drop', this.dropListener);
+        this.element.querySelector('.js-dropzone-browse-button').removeEventListener('click', this.browseButtonClickListener);
     }
 
     protected addOutputContainer(): void {
@@ -76,7 +126,7 @@ export class Dropzone extends EventsEmitter {
         this.filesForOutput = [];
         if (dropzoneFiles) {
             dropzoneFiles.forEach((aDropzoneFile: DropzoneFile) => {
-                const fileToAppend: DropzoneFileElement = new DropzoneFileElement(aDropzoneFile);
+                const fileToAppend: DropzoneFileElement = new DropzoneFileElement(aDropzoneFile, this.i18nResources);
                 this.filesForOutput.push(fileToAppend);
                 //if (files[i].type.indexOf('image/') === 0) {
                 //    outputElement.innerHTML += '<img width="200" src="' + URL.createObjectURL(files[i]) + '" />';
@@ -95,7 +145,7 @@ export class Dropzone extends EventsEmitter {
                         this.handleDeleteErrorForFile(dropzoneFile, error);
                     });
                 }));
-                this.outputDiv.appendChild(fileToAppend.getOutputElement());
+                this.outputDiv.appendChild(fileToAppend.getElement());
             });
         }
     }
@@ -131,10 +181,10 @@ export class Dropzone extends EventsEmitter {
             dropzoneFile.file = file;
             dropzoneFile.fileName = file.name;
             dropzoneFile.fileType = file.type;
-            dropzoneFile.id = '' + Dropzone.DROPZON_FILE_ID++;
+            dropzoneFile.id = '' + Dropzone.DROPZONE_FILE_ID++;
             dropzoneFile.fileSizeInBytes = file.size;
 
-            const fileToAppend: DropzoneFileElement = new DropzoneFileElement(dropzoneFile);
+            const fileToAppend: DropzoneFileElement = new DropzoneFileElement(dropzoneFile, this.i18nResources);
             this.filesForOutput.push(fileToAppend);
 
             //if (files[i].type.indexOf('image/') === 0) {
@@ -145,11 +195,13 @@ export class Dropzone extends EventsEmitter {
             fileToAppend.addOnDownloadFileEventListener((dropzoneFile => {
                 this.emit(DropzoneEvents.DOWNLOAD_FILE, dropzoneFile);
             }));
-            this.outputDiv.appendChild(fileToAppend.getOutputElement());
-            this.emit(DropzoneEvents.ON_FILE_DROPPED, dropzoneFile, (data: any) => {
-                this.handleUploadCompleteForFile(dropzoneFile);
+            this.outputDiv.appendChild(fileToAppend.getElement());
+            this.emit(DropzoneEvents.ON_FILE_DROPPED, dropzoneFile, (data: DropzoneFile) => {
+                this.handleUploadCompleteForFile(data);
             }, (error: any) => {
                 this.handleUploadErrorForFile(dropzoneFile, error);
+            }, (uploadPecentage: number) => {
+                this.handleProgress(dropzoneFile, uploadPecentage);
             });
 
             fileToAppend.addOnDeleteFileEventListener((dropzoneFile => {
@@ -160,12 +212,17 @@ export class Dropzone extends EventsEmitter {
                     this.handleDeleteErrorForFile(dropzoneFile, error);
                 });
             }));
+
+            fileToAppend.addOnRemoveDropzoneFileElementEventListener(() => {
+                fileToAppend.destroy();
+                this.outputDiv.removeChild(fileToAppend.getElement());
+            })
         }
     }
 
     private handleUploadCompleteForFile(dropzoneFile: DropzoneFile): void {
         const element: DropzoneFileElement = this.getDropzoneFileElementForModel(dropzoneFile);
-        element.handleUploadCompleted();
+        element.handleUploadCompleted(dropzoneFile);
     }
 
     private handleUploadErrorForFile(dropzoneFile: DropzoneFile, error: any): void {
@@ -173,10 +230,15 @@ export class Dropzone extends EventsEmitter {
         element.handleUploadError(error);
     }
 
+    private handleProgress(dropzoneFile: DropzoneFile, uploadPercentage: number): void {
+        const element: DropzoneFileElement = this.getDropzoneFileElementForModel(dropzoneFile);
+        element.handleUploadProgress(uploadPercentage);
+    }
+
     private handleDeleteCompleteForFile(dropzoneFile: DropzoneFile): void {
         const element: DropzoneFileElement = this.getDropzoneFileElementForModel(dropzoneFile);
         element.handleDeleteCompleted();
-        this.outputDiv.removeChild(element.getOutputElement());
+        this.outputDiv.removeChild(element.getElement());
     }
 
     private handleDeleteErrorForFile(dropzoneFile: DropzoneFile, error: any): void {
@@ -197,7 +259,8 @@ export class Dropzone extends EventsEmitter {
     }
 
     private removeDropzoneFileElement(element: DropzoneFileElement) {
-        this.outputDiv.removeChild(element.getOutputElement());
+        this.outputDiv.removeChild(element.getElement());
         element.destroy();
     }
+
 }

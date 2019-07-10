@@ -1,15 +1,24 @@
 import { DropzoneFile } from './model/dropzone-file';
 import EventsEmitter from './event-emitter';
 import { DropzoneEvents } from './dropzone-events';
+import {DropzoneI18nResource} from "./model/dropzone-i18n";
 
 export class DropzoneFileElement extends EventsEmitter {
 
+    private readonly element: HTMLDivElement;
     private readonly outputElement: HTMLDivElement;
+    private readonly uploadStatusElement: HTMLDivElement;
 
-    constructor(private dropzoneFile: DropzoneFile) {
+    constructor(protected dropzoneFile: DropzoneFile, protected i18nResource: DropzoneI18nResource) {
         super();
+        this.element = document.createElement('div');
+        this.element.classList.add('m-dropzone-file-element');
         this.outputElement = document.createElement('div');
         this.outputElement.classList.add('m-dropzone-output-element');
+        this.uploadStatusElement = document.createElement('div');
+        this.uploadStatusElement.classList.add('m-dropzone-upload-status-element');
+        this.element.appendChild(this.outputElement);
+        this.element.appendChild(this.uploadStatusElement);
         this.initHtml();
     }
 
@@ -21,6 +30,10 @@ export class DropzoneFileElement extends EventsEmitter {
 
     addOnDeleteFileEventListener(listener: (dropzoneFile: DropzoneFile) => void): void {
         this.on(DropzoneEvents.DELETE_FILE, listener);
+    }
+
+    addOnRemoveDropzoneFileElementEventListener(listener: () => void): void {
+        this.on(DropzoneEvents.REMOVE_DROPZONE_FILE_ELEMENT, listener);
     }
 
     addOnDownloadFileEventListener(listener: (dropzoneFile: DropzoneFile) => void): void {
@@ -43,10 +56,19 @@ export class DropzoneFileElement extends EventsEmitter {
 
     private initHtml(): void {
         this.outputElement.innerHTML = `<div class="js-dropzone-output-element-start-download m-dropzone-output-element__file-icon dropzone-file"></div>
+                        <div class="js-dropzone-output-element-thumbnail-container js-dropzone-output-element-start-download m-dropzone-output-element__thumbnail-container"></div>
                         <a class="js-dropzone-output-element-start-download m-dropzone-output-element__file-name">${this.dropzoneFile.fileName}</a>
                         <div class="m-dropzone-output-element__bottom-container"><span class="m-dropzone-output-element__size">${this.convertSizeToReadableFormat()}</span>
                            <a class="js-dropzone-output-element-start-delete m-dropzone-output-element__delete-button dropzone-delete-file"></a>
                         </div>`;
+
+        if (!!this.dropzoneFile.thumbnailUrl) {
+            this.outputElement.querySelector('.js-dropzone-output-element-thumbnail-container').innerHTML = '<img class="m-dropzone-output-element__thumbnail-img" src="' + this.dropzoneFile.thumbnailUrl + '" />';
+            this.outputElement.classList.add('m-dropzone-output-element--with-thumbail');
+        } else {
+            this.outputElement.classList.remove('m-dropzone-output-element--with-thumbail');
+        }
+
         if (this.dropzoneFile.canBeDownloaded) {
             this.makeDownloadable();
         }
@@ -58,9 +80,9 @@ export class DropzoneFileElement extends EventsEmitter {
     private convertSizeToReadableFormat(): string {
         if (this.dropzoneFile.fileSizeInBytes) {
             if (this.dropzoneFile.fileSizeInBytes > 1000000) { /* Megabytes*/
-                return (this.dropzoneFile.fileSizeInBytes / 1000000).toFixed(1) + ' MB';
+                return (this.dropzoneFile.fileSizeInBytes / 1000000).toFixed(0) + ' MB';
             } else if (this.dropzoneFile.fileSizeInBytes > 1000) { /* Kilobytes*/
-                return (this.dropzoneFile.fileSizeInBytes / 1000).toFixed(1) + ' kB';
+                return (this.dropzoneFile.fileSizeInBytes / 1000).toFixed(0) + ' kB';
             } else {
                 return this.dropzoneFile.fileSizeInBytes + ' b';
             }
@@ -74,9 +96,18 @@ export class DropzoneFileElement extends EventsEmitter {
         this.destroy();
     }
 
-    handleUploadCompleted(): void { // todo input dropzone file
+    handleUploadCompleted(dropzoneFile: DropzoneFile): void {
+        this.dropzoneFile = dropzoneFile;
+        this.clearInnerHtml();
         this.initHtml();
-        this.makeDownloadable();
+
+        setTimeout(() => {
+            this.uploadStatusElement.innerHTML = `<span class="m-dropzone-upload-status-element__progress">${this.i18nResource.uploadCompleteLabel}</span>`;
+            setTimeout(() => {
+                this.uploadStatusElement.classList.remove('m-dropzone-upload-status-element--is-in-progress');
+            }, 1000)
+        }, 500);
+
     }
 
     private makeDownloadable() {
@@ -101,7 +132,16 @@ export class DropzoneFileElement extends EventsEmitter {
     }
 
     handleUploadError(error: any): void {
-        this.outputElement.innerHTML += '<span class="m-dropzone-output-element__type">upload error</span>'
+        this.uploadStatusElement.classList.add('m-dropzone-upload-status-element--has-upload-error');
+        this.uploadStatusElement.innerHTML = `<span class="m-dropzone-upload-status-element__upload-error">${this.i18nResource.uploadErrorLabel}</span>`;
+        setTimeout(() => {
+            this.emit(DropzoneEvents.REMOVE_DROPZONE_FILE_ELEMENT);
+        }, 6000);
+    }
+
+    handleUploadProgress(uploadPercentage:number):void {
+        this.uploadStatusElement.classList.add('m-dropzone-upload-status-element--is-in-progress');
+        this.uploadStatusElement.innerHTML = `<span class="m-dropzone-upload-status-element__progress">${this.i18nResource.uploadProgressLabel} ' + uploadPercentage + '%</span>`;
     }
 
     handleDeleteError(error: any): void {
@@ -112,8 +152,8 @@ export class DropzoneFileElement extends EventsEmitter {
         this.outputElement.classList.remove('m-dropzone-output-element--delete-in-progress');
     }
 
-    getOutputElement(): HTMLDivElement {
-        return this.outputElement;
+    getElement(): HTMLDivElement {
+        return this.element;
     }
 
     public destroy(): void {

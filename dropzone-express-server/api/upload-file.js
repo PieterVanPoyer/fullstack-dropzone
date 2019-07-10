@@ -2,6 +2,7 @@ const express = require('express');
 const formidable = require('formidable');
 const router = express.Router();
 const fs = require('fs');
+const mime = require('mime-types')
 
 /* Post file upload. */
 router.get('/', function (req, res, next) {
@@ -10,13 +11,22 @@ router.get('/', function (req, res, next) {
         const readFiles = [];
         let randomBytes = 500;
         files.forEach(file => {
+            const mimeType = mime.lookup(__dirname + '/uploads/' + file);
+            console.log('mimeType for file', file, mimeType);
+
+            let thumbnail = '';
+            if('image/png' === mimeType) {
+                thumbnail = file;
+            }
+
             readFiles.push({
                 id: file,
                 fileName: file,
                 fileType: 'unknown',
                 canBeDeleted: true,
                 canBeDownloaded: true,
-                fileSizeInBytes: randomBytes
+                fileSizeInBytes: randomBytes,
+                thumbnail: thumbnail
             });
             randomBytes = randomBytes * 2;
         });
@@ -25,13 +35,30 @@ router.get('/', function (req, res, next) {
     });
 });
 
-router.get('/:name', function (req, res, next) {
-    console.log('get uploaded files for name',  req.params.name, __dirname);
+router.get('/:id', function (req, res, next) {
+    console.log('get uploaded files for name',  req.params.id, __dirname);
 
-    const file = __dirname + '/uploads/' + req.params.name;
+    const file = __dirname + '/uploads/' + req.params.id;
     res.download(file); // Set disposition and send it.
 
     /// res.send('get uploaded files for name');
+});
+
+router.delete('/:id', function (req, res, next) {
+    console.log('delete uploaded files for id',  req.params.id, __dirname);
+
+    const file = __dirname + '/uploads/' + req.params.id;
+
+    fs.unlink(file, (err) => {
+        if (err) {
+            console.error(err);
+            next(err);
+            return
+        }
+
+        //file removed
+        res.send();
+    })
 });
 
 /* Post file upload. */
