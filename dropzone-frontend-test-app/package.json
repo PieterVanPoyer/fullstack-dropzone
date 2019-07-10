@@ -1,34 +1,24 @@
 {
-  "name": "dropzone-frontend",
-  "version": "1.0.2",
+  "name": "dropzone-frontend-test-app",
+  "version": "1.0.0",
   "description": "",
-  "files": [
-    "lib/**/*"
-  ],
-  "main": "./lib/scripts/dropzone.js",
-  "types": "./lib/scripts/dropzone.d.ts",
   "scripts": {
     "build": "webpack",
     "start": "webpack-dev-server --open",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build-lib": "gulp clearLibFolder && tsc && gulp copyScssToLibFolder",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
-    "lint": "tslint -p tsconfig.json",
-    "prepare": "npm run build-lib",
-    "prepublishOnly": "npm run lint",
-    "preversion": "npm run lint",
-    "version": "npm run format && git add -A src",
-    "postversion": "git push && git push --tags"
+    "lint": "tslint -p tsconfig.json"
   },
   "author": "Pieter Van Poyer <Pieter.VanPoyer@portofantwerp.com>",
   "license": "MIT",
+  "dependencies": {
+    "dropzone-frontend": "^1.0.0"
+  },
   "devDependencies": {
     "clean-webpack-plugin": "^2.0.2",
     "css-loader": "^2.1.1",
-    "del": "^5.0.0",
     "file-loader": "^3.0.1",
     "fstream": ">=1.0.12",
-    "gulp": "^4.0.2",
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.6.0",
     "node-sass": "^4.12.0",

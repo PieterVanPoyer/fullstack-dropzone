@@ -4,12 +4,12 @@ $dropzone-border: 1px dashed $dropzone-border-color !default;
 $dropzone-drag-in-progress-color: #00CC71 !default;
 
 $dropzone-anchor-color: #0088cc !default;
-$dropzone-anchor-hover-border-bottom: #1px solid $dropzone-anchor-color !default;
+$dropzone-anchor-hover-border-bottom: 1px solid $dropzone-anchor-color !default;
 
 $dropzone-output-max-width: 200px !default;
 
 $dropzone-file-name-color: $dropzone-anchor-color !default;
-$dropzone-file-name-hover-border-bottom: #1px solid $dropzone-file-name-color !default;
+$dropzone-file-name-hover-border-bottom: 1px solid $dropzone-file-name-color !default;
 
 $dropzone-file-icon-color: #0088cc !default;
 $dropzone-file-icon-background-color: #f1f1f1 !default;

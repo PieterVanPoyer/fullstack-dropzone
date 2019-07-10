@@ -68,7 +68,7 @@ export class Dropzone extends EventsEmitter {
     listener: (
       dropzoneFile: DropzoneFile,
       successCallback: (createdDropzoneFile: DropzoneFile) => any | void,
-      errorCallback: (error: any | null | undefined) => any,
+      errorCallback: (error?: any) => any,
       progressCallback: (uploadPercentage: number) => void,
     ) => void,
   ): void {
@@ -82,8 +82,8 @@ export class Dropzone extends EventsEmitter {
   public addOnDeleteFileEventListener(
     listener: (
       dropzoneFile: DropzoneFile,
-      successCallback: (deletedFile: any | null | undefined) => any,
-      errorCallback: (error: any | null | undefined) => any,
+      successCallback: (deletedFile?: any) => any,
+      errorCallback: (error?: any) => any,
     ) => void,
   ): void {
     this.on(DropzoneEvents.DELETE_FILE, listener);

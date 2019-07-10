@@ -9,5 +9,5 @@ body {
   }
 }
 
-$dropzone-font-path: "./font/fonts" !default;
-@import 'export/dropzone-lib';
+
+@import '../../node_modules/dropzone-frontend/lib/styles/export/dropzone-lib';
