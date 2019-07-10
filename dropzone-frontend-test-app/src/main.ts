@@ -1,6 +1,6 @@
 import { sayHello } from './greet';
-import {Dropzone} from "dropzone-frontend";
 import {DropzoneFile} from "dropzone-frontend/lib/scripts/model/dropzone-file";
+import {Dropzone} from "dropzone-frontend/lib/scripts/dropzone";
 
 const dropzone: Dropzone = new Dropzone(window.document.querySelector('.m-dropzone'), {
   uploadProgressLabel: 'upload progress',
@@ -12,7 +12,10 @@ const dropzone: Dropzone = new Dropzone(window.document.querySelector('.m-dropzo
 dropzone.setReadonly(true);
 dropzone.setReadonly(false);
 
-dropzone.addOnFileDroppedEventListener((file, successCallback, errorCallback, progress) => {
+dropzone.addOnFileDroppedEventListener((file: DropzoneFile,
+                                        successCallback: (createdDropzoneFile: DropzoneFile) => any | void,
+                                        errorCallback: (error?: any) => any,
+                                        progress: (uploadPercentage: number) => void) => {
   console.log(file);
   const output = document.querySelector('.output');
   output.innerHTML = '';
@@ -75,7 +78,9 @@ dropzone.addDownloadFileEventListener((dropzoneFile: DropzoneFile) => {
   window.open(`http://localhost:3000/api/upload-file/${dropzoneFile.fileName}`);
 });
 
-dropzone.addOnDeleteFileEventListener((file, successCallback, errorCallback) => {
+dropzone.addOnDeleteFileEventListener((file: DropzoneFile,
+                                       successCallback: (deletedFile?: any) => any,
+                                       errorCallback: (error?: any) => void) => {
   const formData = new FormData();
   formData.append('file', file.file);
   fetch(`http://localhost:3000/api/upload-file/${file.id}`, {
