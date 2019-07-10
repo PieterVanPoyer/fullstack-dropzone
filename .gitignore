@@ -3,3 +3,4 @@ dropzone-express-server/api/uploads/**
 **.iml
 .idea/*
 dropzone-express-server/bin/*
+dropzone-frontend/lib/*

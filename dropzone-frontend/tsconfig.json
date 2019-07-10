@@ -1,14 +1,14 @@
 {
-  "files": [
-    "src/main.ts"
-  ],
   "compilerOptions": {
-    "outDir": "./dist/",
+    "outDir": "./lib/scripts/",
     "noImplicitAny": true,
     "module": "es6",
     "target": "es5",
-    "sourceMap": true
+    "sourceMap": true,
+    "declaration": true,
+    "strict": false
   },
+  "include": ["src/dropzone/"],
   "exclude": [
     "node_modules"
   ]

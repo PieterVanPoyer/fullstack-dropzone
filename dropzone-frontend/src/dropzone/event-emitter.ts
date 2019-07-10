@@ -1,81 +1,61 @@
-
 export default class EventsEmitter {
+  private listenersByEventTypeObject: any = {};
 
-    private _events: any = {};
+  /////////////////////////////////////////////////////////
+  // Supports multiple events space-separated
+  //
+  /////////////////////////////////////////////////////////
+  public on(events?: any, fct?: any) {
+    events.split(' ').forEach((event: string) => {
+      this.listenersByEventTypeObject[event] = this.listenersByEventTypeObject[event] || [];
+      this.listenersByEventTypeObject[event].push(fct);
+    });
 
-    /////////////////////////////////////////////////////////
-    //
-    //
-    /////////////////////////////////////////////////////////
-    constructor () {
+    return this;
+  }
+
+  /////////////////////////////////////////////////////////
+  // Supports multiple events space-separated
+  //
+  /////////////////////////////////////////////////////////
+  public off(events?: any, fct?: any) {
+    if (events === undefined) {
+      this.listenersByEventTypeObject = {};
+      return;
     }
 
-    /////////////////////////////////////////////////////////
-    // Supports multiple events space-separated
-    //
-    /////////////////////////////////////////////////////////
-    on (events?: any, fct?: any) {
+    events.split(' ').forEach((event: string) => {
+      if (event in this.listenersByEventTypeObject === false) {
+        return;
+      }
 
-        events.split(' ').forEach((event: string) => {
-            this._events[event] = this._events[event]	|| []
-            this._events[event].push(fct)
-        });
+      if (fct) {
+        this.listenersByEventTypeObject[event].splice(this.listenersByEventTypeObject[event].indexOf(fct), 1);
+      } else {
+        this.listenersByEventTypeObject[event] = [];
+      }
+    });
 
-        return this;
+    return this;
+  }
+
+  /////////////////////////////////////////////////////////
+  //
+  //
+  /////////////////////////////////////////////////////////
+  public emit(event: string, ...args: any[] /* , args... */) {
+    if (this.listenersByEventTypeObject[event] === undefined) {
+      return null;
     }
 
-    /////////////////////////////////////////////////////////
-    // Supports multiple events space-separated
-    //
-    /////////////////////////////////////////////////////////
-    off (events?:any, fct?:any) {
+    const tmpArray = this.listenersByEventTypeObject[event].slice();
 
-        if(events == undefined){
-            this._events = {};
-            return;
-        }
+    for (const listener of tmpArray) {
+      const result = listener.apply(this, Array.prototype.slice.call(arguments, 1));
 
-        events.split(' ').forEach((event:string) => {
-
-            if (event in this._events === false) {
-                return;
-            }
-
-            if (fct) {
-
-                this._events[event].splice(
-                    this._events[event].indexOf(fct), 1);
-
-            } else {
-
-                this._events[event] = [];
-            }
-        });
-
-        return this
+      if (result !== undefined) {
+        return result;
+      }
     }
-
-    /////////////////////////////////////////////////////////
-    //
-    //
-    /////////////////////////////////////////////////////////
-    emit (event: string, ... args: any[] /* , args... */) {
-
-        if(this._events[event] === undefined) {
-            return null;
-        }
-
-        const tmpArray = this._events[event].slice()
-
-        for (let i = 0; i < tmpArray.length; ++i) {
-
-            const result = tmpArray[i].apply(this,
-                Array.prototype.slice.call(arguments, 1));
-
-            if(result !== undefined) {
-                return result
-            }
-        }
-    }
-
+  }
 }
