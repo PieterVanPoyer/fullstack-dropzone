@@ -46,6 +46,11 @@ dropzone.addOnFileDroppedEventListener((file: DropzoneFile,
     if (xhr.readyState === 4 && xhr.status === 200) {
       file.canBeDeleted = true;
       file.canBeDownloaded = true;
+
+      if (file.file.type.indexOf('image/') === 0) {
+        file.thumbnailUrl = 'http://localhost:3000/api/upload-file/' + file.fileName;
+      }
+
       successCallback(file);
     }
   };

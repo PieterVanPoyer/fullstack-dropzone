@@ -144,7 +144,7 @@ export class DropzoneFileElement extends EventsEmitter {
 
   public handleUploadProgress(uploadPercentage: number): void {
     this.uploadStatusElement.classList.add('m-dropzone-upload-status--is-in-progress');
-    this.uploadStatusElement.innerHTML = `<span class="m-dropzone-upload-status__progress">${this.i18nResource.uploadProgressLabel} ' + uploadPercentage + '%</span>`;
+    this.uploadStatusElement.innerHTML = `<span class="m-dropzone-upload-status__progress">${this.i18nResource.uploadProgressLabel} ${uploadPercentage}%</span>`;
   }
 
   public handleDeleteError(error: any): void {
