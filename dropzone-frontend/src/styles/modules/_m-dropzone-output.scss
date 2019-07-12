@@ -63,9 +63,12 @@
   min-width: $dropzone-file-icon-min-width;
   min-height: $dropzone-file-icon-min-height;
   border: $dropzone-file-icon-border;
-  font-size: 150px;
-  text-align: center;
+  font-size: 48px;
   color: $dropzone-file-icon-color;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center
 }
 
 .m-dropzone-output__thumbnail-container {

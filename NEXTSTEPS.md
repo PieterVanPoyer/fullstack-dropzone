@@ -3,11 +3,10 @@
 - ~~add thumbnail behaviour (backend, frontend, output)~~
 - ~~add disabled/readonly feature~~
 - ~~multilanguage support? i18n, just a json in the code?~~
-- build lib?
+- ~~build lib?~~
 - write documentation (jsDoc, tsDoc, readme? for the lib)
-- build angular integration
-- publish on npm
-- other icon (see design!)
+- ~~publish on npm~~
+- ~~other icon (see design!)~~
 - ~~scss 2 modules and variables~~
 
 # Next steps?
@@ -65,9 +64,11 @@
     - add CTRL-PASTE behaviour
     - enable Edge, IE11, Firefox? Safari?
     - build preview library (next lib!)
-    - refactor scss to use two models and variables.
+    - ~~refactor scss to use two models and variables.~~
     - appendDropzoneFile(dropzoneFile: DropzoneFile): void of prepend of insertDropzoneFileAt(dzfile, index)? 
     - getNumberOfDropzoneFiles():number
+    - cors.
+    - build angular integration
     
     - IE - bugs
         - The top off the dropzone is not droppable, make it droppable in IE11.
