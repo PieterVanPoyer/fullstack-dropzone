@@ -41,6 +41,8 @@ export class Dropzone extends EventsEmitter {
     protected i18nResources: DropzoneI18nResource = new DefaultI18nResource(),
   ) {
     super();
+
+    this.element.classList.add('m-dropzone');
     this.makeDroppable();
     this.addOutputContainer();
   }
@@ -90,6 +92,7 @@ export class Dropzone extends EventsEmitter {
   }
 
   public destroy(): void {
+    this.element.classList.remove('m-dropzone');
     this.clearInnerHtml();
     this.off(DropzoneEvents.ON_FILE_DROPPED);
     this.off(DropzoneEvents.DOWNLOAD_FILE);

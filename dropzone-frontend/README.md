@@ -1,4 +1,32 @@
-import { sayHello } from './greet';
+# dropzone-frontend
+
+A html5 - dropzone library.
+It can directly be consumed as a typescript library. The current setup needs an scss compilation step. 
+
+![dropzone-example-giffy](readme/dropzone-example.gif)
+
+## Installation
+    npm i dropzone-frontend
+
+
+## How to use
+
+### TypeScript setup with scss
+ 
+- Include scss in scss file
+
+        @import '../../node_modules/dropzone-frontend/lib/styles/export/dropzone-lib';
+
+- Html file: add a container on your Html file
+
+        <div id="myDropzone">
+        </div>
+        
+- TypeScript file: turn the html-container in a dropzone
+
+
+````
+
 import {DropzoneFile} from "dropzone-frontend/lib/scripts/model/dropzone-file";
 import {Dropzone} from "dropzone-frontend/lib/scripts/dropzone";
 
@@ -8,10 +36,9 @@ const dropzone: Dropzone = new Dropzone(window.document.querySelector('#myDropzo
   uploadCompleteLabel: 'Upload is compleet',
   browseLabel: 'browse.',
   dropFilesLabel: 'Sleep bestanden om bij te voegen of ',
-});
-// dropzone.setReadonly(true);
-// dropzone.setReadonly(false);
+}); // <-- optionally an i18n - override can be added
 
+// upload the file when it is dropped.
 dropzone.addOnFileDroppedEventListener((file: DropzoneFile,
                                         successCallback: (createdDropzoneFile: DropzoneFile) => any | void,
                                         errorCallback: (error?: any) => any,
@@ -54,10 +81,12 @@ dropzone.addOnFileDroppedEventListener((file: DropzoneFile,
   xhr.send(formData);
 });
 
+// handle the download file action
 dropzone.addDownloadFileEventListener((dropzoneFile: DropzoneFile) => {
   window.open(`http://localhost:3000/api/upload-file/${dropzoneFile.fileName}`);
 });
 
+// When the user want's to delete the file, do the delete
 dropzone.addOnDeleteFileEventListener((file: DropzoneFile,
                                        successCallback: (deletedFile?: any) => any,
                                        errorCallback: (error?: any) => void) => {
@@ -83,6 +112,7 @@ dropzone.addOnDeleteFileEventListener((file: DropzoneFile,
     });
 });
 
+// load all the files
 fetch('http://localhost:3000/api/upload-file', {
   method: 'GET', // *GET, POST, PUT, DELETE, etc.
   mode: 'cors', // no-cors, cors, *same-origin
@@ -102,16 +132,10 @@ fetch('http://localhost:3000/api/upload-file', {
           aJson.thumbnailUrl = 'http://localhost:3000/api/upload-file/' + aJson.thumbnail;
         }
       });
-      dropzone.setDropzoneFiles(jsonData);
+      dropzone.setDropzoneFiles(jsonData); // put the loaded files on the dropzone
     });
   }) // JSON-string from `response.json()` call
   .catch(error => {
     console.error('error during read', error);
   });
-
-function showHello(divName: string, name: string) {
-  const elt = document.getElementById(divName);
-  elt.innerText = sayHello(name) + 'main upd this works veel beter!';
-}
-
-showHello('greeting', 'TypeScript');
+```` 
