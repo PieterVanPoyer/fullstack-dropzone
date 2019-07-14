@@ -1,6 +1,6 @@
 {
   "name": "dropzone-frontend",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "",
   "keywords": [
     "html5",
@@ -17,8 +17,8 @@
     "url": "https://github.com/PieterVanPoyer/fullstack-dropzone/issues"
   },
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/PieterVanPoyer/fullstack-dropzone.git",
+    "type": "git",
+    "url": "https://github.com/PieterVanPoyer/fullstack-dropzone.git",
     "directory": "dropzone-frontend"
   },
   "browser": "./lib/scripts/dropzone.js",
