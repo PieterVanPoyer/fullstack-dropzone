@@ -2,10 +2,26 @@
   "name": "dropzone-frontend",
   "version": "1.0.9",
   "description": "",
+  "keywords": [
+    "html5",
+    "file upload",
+    "dropzone",
+    "typescript",
+    "scss"
+  ],
   "files": [
     "lib/**/*"
   ],
-  "main": "./lib/scripts/dropzone.js",
+  "homepage": "https://github.com/PieterVanPoyer/fullstack-dropzone",
+  "bugs": {
+    "url": "https://github.com/PieterVanPoyer/fullstack-dropzone/issues"
+  },
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/PieterVanPoyer/fullstack-dropzone.git",
+    "directory": "dropzone-frontend"
+  },
+  "browser": "./lib/scripts/dropzone.js",
   "types": "./lib/scripts/dropzone.d.ts",
   "scripts": {
     "build": "webpack",
