@@ -23,6 +23,7 @@
 - cors.
 - build angular integration
 - Document next steps in issue tracker
+- npm version patch? remove git add?
 
 # Next steps?
 
@@ -50,3 +51,4 @@
         - The top off the dropzone is not droppable, make it droppable in IE11.
         - fallback for IE10
     - write tests.
+    - travis, ci?
