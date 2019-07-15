@@ -11,7 +11,7 @@
 
 # Second release
 - configure dropppable, uploadable types?
-- Upload on client command
+- features/no-auto-upload: Upload on client command
 - provide a template way for adding the fileitem?
 - ~~promote i18n feature in readme~~ 
     - ~~change: upload is compleet => De upload is voltooid.~~
