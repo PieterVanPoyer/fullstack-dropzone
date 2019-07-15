@@ -5,7 +5,7 @@ import {Dropzone} from "dropzone-frontend/lib/scripts/dropzone";
 const dropzone: Dropzone = new Dropzone(window.document.querySelector('#myDropzone'), {
   uploadProgressLabel: 'upload progress',
   uploadErrorLabel: 'upload error',
-  uploadCompleteLabel: 'Upload is compleet',
+  uploadCompleteLabel: 'De upload is voltooid',
   browseLabel: 'browse.',
   dropFilesLabel: 'Sleep bestanden om bij te voegen of ',
 });

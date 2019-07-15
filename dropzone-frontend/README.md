@@ -7,6 +7,7 @@ Turns an html5 - component in an amazing dropzone for fileupload.
 - You have to provide the handlers for uploading, downloading, deleting yourself offcourse. 
 So, there are no strings attached to any backend technology. 
 - The dropzone can be populated with current state. It can be used for a readonly file output object.
+- i18n: you can add custom labels, or translate labels with the i18n dropzone resource.
 - The current setup needs a scss compilation step. 
 
 ![dropzone-example-giffy](https://github.com/PieterVanPoyer/fullstack-dropzone/blob/master/dropzone-frontend/readme/dropzone-example.gif?raw=true)
@@ -33,27 +34,28 @@ Meta flow
 - turn the html element in a dropzone
     
         const dropzone: Dropzone = new Dropzone(window.document.querySelector('#myDropzone')/*, 
-        // optionally an i18n - override can be added */);
+            optionally an i18n - override can be added */);
         
 - add a listener for a file drop (give feedback with the progress, succesCallback and errorCallback - functions)
 
         dropzone.addOnFileDroppedEventListener((file: DropzoneFile,
-                                        successCallback: (createdDropzoneFile: DropzoneFile) => any | void,
-                                        errorCallback: (error?: any) => any,
-                                        progress: (uploadPercentage: number) => void) => {
-                                        // <- upload the file anyway you want
+            successCallback: (createdDropzoneFile: DropzoneFile) => any | void,
+            errorCallback: (error?: any) => any,
+            progress: (uploadPercentage: number) => void) => {
+            // <- upload the file anyway you want
 
 - add a listener when the user wants to download the file
         
-        dropzone.addDownloadFileEventListener((dropzoneFile: DropzoneFile) => { // <- download the file any way you want
+        dropzone.addDownloadFileEventListener((dropzoneFile: DropzoneFile) => { 
+            // <- download the file any way you want
           
 
 - add a delete listener
 
         dropzone.addOnDeleteFileEventListener((file: DropzoneFile,
-                                               successCallback: (deletedFile?: any) => any,
-                                               errorCallback: (error?: any) => void) => {
-                                   // <- delete the file, any way you want.
+           successCallback: (deletedFile?: any) => any,
+           errorCallback: (error?: any) => void) => {
+           // <- delete the file, any way you want.
                                    
 - popupulate the dropzone with the current state. (Expected type: DropzoneFile)
 
@@ -66,22 +68,24 @@ import {DropzoneFile} from "dropzone-frontend/lib/scripts/model/dropzone-file";
 import {Dropzone} from "dropzone-frontend/lib/scripts/dropzone";
 
 const dropzone: Dropzone = new Dropzone(window.document.querySelector('#myDropzone')/*, 
-    // optionally an i18n - override can be added */); 
+    optionally an i18n - override can be added */); 
 
 // upload the file when it is dropped.
 dropzone.addOnFileDroppedEventListener((file: DropzoneFile,
-                                        successCallback: (createdDropzoneFile: DropzoneFile) => any | void,
-                                        errorCallback: (error?: any) => any,
-                                        progress: (uploadPercentage: number) => void) => {
+    successCallback: (createdDropzoneFile: DropzoneFile) => any | void,
+    errorCallback: (error?: any) => any,
+    progress: (uploadPercentage: number) => void) => {
   const formData = new FormData();
-  formData.append('file', file.file); // <- the file is in the file.file attribute.
+  formData.append('file', file.file); 
+    // <- the file is in the file.file attribute.
   
   if (xhr.upload) {
     xhr.upload.onprogress = (e: any) => {
       const done = e.position || e.loaded,
         total = e.totalSize || e.total;
       const percentage = Math.floor((done / total) * 1000) / 10;
-      progress(percentage); // <- give progress feedback by calling progress with percentage
+      progress(percentage); 
+        // <- give progress feedback by calling progress with percentage
     };
   }
   
@@ -91,8 +95,9 @@ dropzone.addOnFileDroppedEventListener((file: DropzoneFile,
   
   xhr.onreadystatechange = (e: any) => {
     if (xhr.readyState === 4 && xhr.status === 200) {
-      successCallback(file); // <- if everything goes well notify the dropzone by the successCallback
-                                // the successCallback excepts an object of type DropzoneFile
+      successCallback(file); 
+        // <- if everything goes well notify the dropzone by the successCallback
+        // the successCallback excepts an object of type DropzoneFile
     }
   };
   xhr.open('post', 'http://localhost:3000/api/upload-file', true);
@@ -101,13 +106,14 @@ dropzone.addOnFileDroppedEventListener((file: DropzoneFile,
 
 // handle the download file action
 dropzone.addDownloadFileEventListener((dropzoneFile: DropzoneFile) => {
-  window.open(`http://localhost:3000/api/upload-file/${dropzoneFile.fileName}`); // <- download the file any way you want
+  window.open(`http://localhost:3000/api/upload-file/${dropzoneFile.fileName}`); 
+    // <- download the file any way you want
 });
 
 // When the user want's to delete the file, do the delete
 dropzone.addOnDeleteFileEventListener((file: DropzoneFile,
-                                       successCallback: (deletedFile?: any) => any,
-                                       errorCallback: (error?: any) => void) => {
+   successCallback: (deletedFile?: any) => any,
+   errorCallback: (error?: any) => void) => {
   const formData = new FormData();
   formData.append('file', file.file);
   fetch(`http://localhost:3000/api/upload-file/${file.id}`, {
