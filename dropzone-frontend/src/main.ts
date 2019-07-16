@@ -1,14 +1,16 @@
 import { sayHello } from './greet';
 import { Dropzone } from './dropzone/dropzone';
 import { DropzoneFile } from './dropzone/model/dropzone-file';
+import { DefaultDropzoneProps } from './dropzone/model/dropzone-props';
 
-const dropzone: Dropzone = new Dropzone(window.document.querySelector('.m-dropzone'), {
+const dropzone: Dropzone = new Dropzone(window.document.querySelector('.m-dropzone'), new DefaultDropzoneProps(), {
   uploadProgressLabel: 'upload progress',
   uploadErrorLabel: 'upload error',
   uploadCompleteLabel: 'De upload is voltooid',
   browseLabel: 'browse.',
   dropFilesLabel: 'Sleep bestanden om bij te voegen of ',
 });
+
 dropzone.setReadonly(true);
 dropzone.setReadonly(false);
 
@@ -62,6 +64,7 @@ dropzone.addOnFileDroppedEventListener((file, successCallback, errorCallback, pr
       console.log('xhr upload complete', e);
       file.canBeDeleted = true;
       file.canBeDownloaded = true;
+      file.isSaved = true;
       successCallback(file); // todo piv return data from backend, data as any
     }
   };
@@ -133,3 +136,140 @@ function showHello(divName: string, name: string) {
 }
 
 showHello('greeting', 'TypeScript');
+
+const notAutoUploadOnDropDropzone: Dropzone = new Dropzone(
+  window.document.querySelector('.m-dropzone--no-autoupload'),
+  {
+    readonly: false,
+  },
+  {
+    uploadProgressLabel: 'upload progress',
+    uploadErrorLabel: 'upload error',
+    uploadCompleteLabel: 'De upload is voltooid',
+    browseLabel: 'browse.',
+    dropFilesLabel: 'Sleep bestanden om bij te voegen of ',
+  },
+);
+
+let filesToSave: DropzoneFile[] = [];
+
+notAutoUploadOnDropDropzone.addOnFileDroppedEventListener((file, successCallback, errorCallback, progress) => {
+  filesToSave.push(file);
+
+  // thumbnail?
+  const output = document.querySelector('.output');
+  output.innerHTML = '';
+  console.log('filetype', file.file.type);
+
+  file.canBeDeleted = true;
+  if (file.file.type.indexOf('image/') === 0) {
+    file.thumbnailObjectURL = URL.createObjectURL(file.file);
+  }
+  notAutoUploadOnDropDropzone.updateDropzoneFile(file);
+
+  output.innerHTML += '<p>' + file.file.name + '</p>';
+});
+
+notAutoUploadOnDropDropzone.addDownloadFileEventListener((dropzoneFile: DropzoneFile) => {
+  if (dropzoneFile.isSaved) {
+    window.open(`http://localhost:3000/api/upload-file/${dropzoneFile.fileName}`);
+  } else {
+    window.alert('This file cannot be donwloaded yet, because it is not saved yet!');
+  }
+});
+
+const filesToDelete: DropzoneFile[] = [];
+
+notAutoUploadOnDropDropzone.addOnDeleteFileEventListener((file, successCallback, errorCallback) => {
+  if (file.isSaved) {
+    filesToDelete.push(file);
+  } else if (filesToSave.indexOf(file) !== -1) {
+    filesToSave = filesToSave.filter(aFileToSave => {
+      return aFileToSave.id !== file.id;
+    });
+  }
+
+  successCallback(file);
+});
+
+fetch('http://localhost:3000/api/upload-file', {
+  method: 'GET', // *GET, POST, PUT, DELETE, etc.
+  mode: 'cors', // no-cors, cors, *same-origin
+  cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+  credentials: 'same-origin', // include, *same-origin, omit
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  redirect: 'follow', // manual, *follow, error
+  referrer: 'no-referrer', // no-referrer, *client
+  body: undefined, // body data type must match "Content-Type" header
+})
+  .then(data => {
+    console.log('result', data);
+    data.json().then(jsonData => {
+      console.log('json', jsonData);
+      jsonData.forEach((aJson: any | DropzoneFile) => {
+        if (aJson.thumbnail) {
+          aJson.thumbnailUrl = 'http://localhost:3000/api/upload-file/' + aJson.thumbnail;
+        }
+        aJson.isSaved = true;
+      });
+      notAutoUploadOnDropDropzone.setDropzoneFiles(jsonData);
+    });
+  }) // JSON-string from `response.json()` call
+  .catch(error => {
+    console.error('error during read', error);
+  });
+
+document.querySelector('#saveNotUploadDropzoneButton').addEventListener('click', () => {
+  filesToDelete.forEach(aFileToDelete => {
+    const formData = new FormData();
+    formData.append('file', aFileToDelete.file);
+
+    fetch(`http://localhost:3000/api/upload-file/${aFileToDelete.id}`, {
+      method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
+      mode: 'cors', // no-cors, cors, *same-origin
+      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: 'same-origin', // include, *same-origin, omit
+      //headers: {
+      //    'Content-Type': 'multipart/form-data', https://muffinman.io/uploading-files-using-fetch-multipart-form-data/
+      //},
+      redirect: 'follow', // manual, *follow, error
+      referrer: 'no-referrer', // no-referrer, *client
+      body: formData, // body data type must match "Content-Type" header
+    })
+      .then(data => {
+        console.log(JSON.stringify(data));
+        // notAutoUploadOnDropDropzone.updateDropzoneFile(aFileToDelete);
+      }) // JSON-string from `response.json()` call
+      .catch(error => {
+        // errorCallback(error); todo piv handle error, reload? -> add file again
+      });
+  });
+
+  console.log('savefiles', filesToSave);
+  filesToSave.forEach(aFileToSave => {
+    const formData = new FormData();
+    formData.append('file', aFileToSave.file);
+
+    const xhr = new XMLHttpRequest();
+
+    xhr.onerror = () => {
+      console.log('** An error occurred during the transaction');
+      // errorCallback(); // errorCallback(error); todo piv show error on dropzone file -> enable api
+    };
+
+    xhr.onreadystatechange = (e: any) => {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        console.log('xhr upload complete', e);
+        aFileToSave.canBeDeleted = true;
+        aFileToSave.canBeDownloaded = true;
+        aFileToSave.isSaved = true;
+        notAutoUploadOnDropDropzone.updateDropzoneFile(aFileToSave);
+      }
+    };
+    xhr.open('post', 'http://localhost:3000/api/upload-file', true);
+    // xhr.setRequestHeader("Content-Type","multipart/form-data");
+    xhr.send(formData);
+  });
+});

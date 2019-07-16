@@ -3,6 +3,7 @@ import { DropzoneFile } from './model/dropzone-file';
 import EventsEmitter from './event-emitter';
 import { DropzoneEvents } from './dropzone-events';
 import { DefaultI18nResource, DropzoneI18nResource } from './model/dropzone-i18n';
+import { DefaultDropzoneProps, DropzoneProps } from './model/dropzone-props';
 
 export class Dropzone extends EventsEmitter {
   public static DROPZONE_FILE_ID: number = 1;
@@ -38,6 +39,7 @@ export class Dropzone extends EventsEmitter {
 
   constructor(
     protected element: HTMLElement,
+    protected props: DropzoneProps = new DefaultDropzoneProps(),
     protected i18nResources: DropzoneI18nResource = new DefaultI18nResource(),
   ) {
     super();
@@ -45,6 +47,7 @@ export class Dropzone extends EventsEmitter {
     this.element.classList.add('m-dropzone');
     this.makeDroppable();
     this.addOutputContainer();
+    this.setReadonly(this.props.readonly);
   }
 
   public setReadonly(readonly: boolean): void {
@@ -54,6 +57,10 @@ export class Dropzone extends EventsEmitter {
     } else {
       this.applyWritableState();
     }
+  }
+
+  public getReadonly(): boolean {
+    return this.readonly;
   }
 
   private applyReadonlyState(): void {
@@ -168,6 +175,12 @@ export class Dropzone extends EventsEmitter {
         this.outputDiv.appendChild(fileToAppend.getElement());
       });
     }
+  }
+
+  public getDropzoneFiles(): DropzoneFile[] {
+    return this.filesForOutput.map(aDropzoneFileElement => {
+      return aDropzoneFileElement.getDropzoneFile();
+    });
   }
 
   public updateDropzoneFile(dropzoneFile: DropzoneFile): boolean {

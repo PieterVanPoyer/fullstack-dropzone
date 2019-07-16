@@ -67,6 +67,10 @@ export class DropzoneFileElement extends EventsEmitter {
       this.outputElement.querySelector('.js-dropzone-output-thumbnail-container').innerHTML =
         '<img class="m-dropzone-output__thumbnail-img" src="' + this.dropzoneFile.thumbnailUrl + '" />';
       this.outputElement.classList.add('m-dropzone-output--with-thumbail');
+    } else if (!!this.dropzoneFile.thumbnailObjectURL) {
+      this.outputElement.querySelector('.js-dropzone-output-thumbnail-container').innerHTML =
+        '<img class="m-dropzone-output__thumbnail-img" src="' + this.dropzoneFile.thumbnailObjectURL + '" />';
+      this.outputElement.classList.add('m-dropzone-output--with-thumbail');
     } else {
       this.outputElement.classList.remove('m-dropzone-output--with-thumbail');
     }
@@ -157,6 +161,10 @@ export class DropzoneFileElement extends EventsEmitter {
 
   public getElement(): HTMLDivElement {
     return this.element;
+  }
+
+  public getDropzoneFile(): DropzoneFile {
+    return this.dropzoneFile;
   }
 
   public destroy(): void {

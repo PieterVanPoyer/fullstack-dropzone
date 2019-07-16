@@ -6,5 +6,7 @@ export class DropzoneFile {
   public canBeDownloaded: boolean;
   public canBeDeleted: boolean;
   public fileSizeInBytes: number;
+  public thumbnailObjectURL: string;
   public thumbnailUrl: string;
+  public isSaved: boolean;
 }
