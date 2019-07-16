@@ -33,7 +33,8 @@ So, there are no strings attached to any backend technology.
 Meta flow
 - turn the html element in a dropzone
     
-        const dropzone: Dropzone = new Dropzone(window.document.querySelector('#myDropzone')/*, 
+        const dropzone: Dropzone = new Dropzone(window.document.querySelector('#myDropzone')/*,
+            optionally a dropzoneProps - object can be added,  
             optionally an i18n - override can be added */);
         
 - add a listener for a file drop (give feedback with the progress, succesCallback and errorCallback - functions)
@@ -68,6 +69,7 @@ import {DropzoneFile} from "dropzone-frontend/lib/scripts/model/dropzone-file";
 import {Dropzone} from "dropzone-frontend/lib/scripts/dropzone";
 
 const dropzone: Dropzone = new Dropzone(window.document.querySelector('#myDropzone')/*, 
+    optionally a dropzoneProps - object can be added, 
     optionally an i18n - override can be added */); 
 
 // upload the file when it is dropped.

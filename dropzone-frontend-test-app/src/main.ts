@@ -1,16 +1,15 @@
 import { sayHello } from './greet';
 import {DropzoneFile} from "dropzone-frontend/lib/scripts/model/dropzone-file";
 import {Dropzone} from "dropzone-frontend/lib/scripts/dropzone";
+import {DefaultDropzoneProps} from "../../dropzone-frontend/lib/scripts/model/dropzone-props";
 
-const dropzone: Dropzone = new Dropzone(window.document.querySelector('#myDropzone'), {
+const dropzone: Dropzone = new Dropzone(window.document.querySelector('#myDropzone'), new DefaultDropzoneProps(), {
   uploadProgressLabel: 'upload progress',
   uploadErrorLabel: 'upload error',
   uploadCompleteLabel: 'De upload is voltooid',
   browseLabel: 'browse.',
   dropFilesLabel: 'Sleep bestanden om bij te voegen of ',
 });
-// dropzone.setReadonly(true);
-// dropzone.setReadonly(false);
 
 dropzone.addOnFileDroppedEventListener((file: DropzoneFile,
                                         successCallback: (createdDropzoneFile: DropzoneFile) => any | void,
