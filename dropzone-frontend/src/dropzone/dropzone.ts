@@ -148,33 +148,37 @@ export class Dropzone extends EventsEmitter {
   }
 
   public setDropzoneFiles(dropzoneFiles: DropzoneFile[]): void {
-    this.removeAllDropzoneFileElements();
+    this.removeAllDropzoneFileElementsFromOutputContainer();
     this.filesForOutput = [];
     if (dropzoneFiles) {
       dropzoneFiles.forEach((aDropzoneFile: DropzoneFile) => {
-        const fileToAppend: DropzoneFileElement = new DropzoneFileElement(aDropzoneFile, this.i18nResources);
-        this.filesForOutput.push(fileToAppend);
-
-        fileToAppend.addOnDownloadFileEventListener(dropzoneFile => {
-          this.emit(DropzoneEvents.DOWNLOAD_FILE, dropzoneFile);
-        });
-
-        fileToAppend.addOnDeleteFileEventListener(dropzoneFile => {
-          fileToAppend.markAsDeleteInProgress();
-          this.emit(
-            DropzoneEvents.DELETE_FILE,
-            dropzoneFile,
-            () => {
-              this.handleDeleteCompleteForFile(dropzoneFile);
-            },
-            (error: any) => {
-              this.handleDeleteErrorForFile(dropzoneFile, error);
-            },
-          );
-        });
-        this.outputDiv.appendChild(fileToAppend.getElement());
+        this.appendDropzoneFile(aDropzoneFile);
       });
     }
+  }
+
+  public appendDropzoneFile(aDropzoneFile: DropzoneFile) {
+    const fileToAppend: DropzoneFileElement = new DropzoneFileElement(aDropzoneFile, this.i18nResources);
+    this.filesForOutput.push(fileToAppend);
+
+    fileToAppend.addOnDownloadFileEventListener(dropzoneFile => {
+      this.emit(DropzoneEvents.DOWNLOAD_FILE, dropzoneFile);
+    });
+
+    fileToAppend.addOnDeleteFileEventListener(dropzoneFile => {
+      fileToAppend.markAsDeleteInProgress();
+      this.emit(
+          DropzoneEvents.DELETE_FILE,
+          dropzoneFile,
+          () => {
+            this.handleDeleteCompleteForFile(dropzoneFile);
+          },
+          (error: any) => {
+            this.handleDeleteErrorForFile(dropzoneFile, error);
+          },
+      );
+    });
+    this.outputDiv.appendChild(fileToAppend.getElement());
   }
 
   public getDropzoneFiles(): DropzoneFile[] {
@@ -195,7 +199,8 @@ export class Dropzone extends EventsEmitter {
   public removeDropzoneFile(dropzoneFile: DropzoneFile): boolean {
     const dropzoneFileElement: DropzoneFileElement = this.getDropzoneFileElementForModel(dropzoneFile);
     if (dropzoneFileElement) {
-      this.removeDropzoneFileElement(dropzoneFileElement);
+      this.removeDropzoneFileElementFromOutputContainer(dropzoneFileElement);
+      this.removeDropzoneFileElementFromModelArray(dropzoneFileElement);
       return true;
     }
     return false;
@@ -275,7 +280,12 @@ export class Dropzone extends EventsEmitter {
   private handleDeleteCompleteForFile(dropzoneFile: DropzoneFile): void {
     const element: DropzoneFileElement = this.getDropzoneFileElementForModel(dropzoneFile);
     element.handleDeleteCompleted();
-    this.outputDiv.removeChild(element.getElement());
+    this.removeDropzoneFileElementFromModelArray(element);
+    this.removeDropzoneFileElementFromOutputContainer(element);
+  }
+
+  private removeDropzoneFileElementFromModelArray(element: DropzoneFileElement) {
+    this.filesForOutput.splice(this.filesForOutput.indexOf(element, 1));
   }
 
   private handleDeleteErrorForFile(dropzoneFile: DropzoneFile, error: any): void {
@@ -289,13 +299,13 @@ export class Dropzone extends EventsEmitter {
     });
   }
 
-  private removeAllDropzoneFileElements(): void {
+  private removeAllDropzoneFileElementsFromOutputContainer(): void {
     this.filesForOutput.forEach(element => {
-      this.removeDropzoneFileElement(element);
+      this.removeDropzoneFileElementFromOutputContainer(element);
     });
   }
 
-  private removeDropzoneFileElement(element: DropzoneFileElement) {
+  private removeDropzoneFileElementFromOutputContainer(element: DropzoneFileElement) {
     this.outputDiv.removeChild(element.getElement());
     element.destroy();
   }

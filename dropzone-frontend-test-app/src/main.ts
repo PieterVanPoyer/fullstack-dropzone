@@ -1,4 +1,3 @@
-import { sayHello } from './greet';
 import {DropzoneFile} from "dropzone-frontend/lib/scripts/model/dropzone-file";
 import {Dropzone} from "dropzone-frontend/lib/scripts/dropzone";
 import {DefaultDropzoneProps} from "../../dropzone-frontend/lib/scripts/model/dropzone-props";
@@ -112,10 +111,3 @@ fetch('http://localhost:3000/api/upload-file', {
   .catch(error => {
     console.error('error during read', error);
   });
-
-function showHello(divName: string, name: string) {
-  const elt = document.getElementById(divName);
-  elt.innerText = sayHello(name) + 'main upd this works veel beter!';
-}
-
-showHello('greeting', 'TypeScript');
