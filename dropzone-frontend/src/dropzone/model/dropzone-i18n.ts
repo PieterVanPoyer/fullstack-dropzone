@@ -4,6 +4,7 @@ export interface DropzoneI18nResource {
     uploadCompleteLabel: string;
     uploadErrorLabel: string;
     uploadProgressLabel: string;
+    invalidTypeText?: string;
 }
 
 export class DefaultI18nResource implements DropzoneI18nResource {
@@ -12,4 +13,5 @@ export class DefaultI18nResource implements DropzoneI18nResource {
     public uploadCompleteLabel = 'upload complete!';
     public uploadErrorLabel = 'upload error';
     public uploadProgressLabel = 'upload progress';
+    public invalidTypeText = 'This filetype is not supported.';
 }

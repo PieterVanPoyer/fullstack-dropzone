@@ -1,6 +1,6 @@
 import {DropzoneFile} from "dropzone-frontend/lib/scripts/model/dropzone-file";
 import {Dropzone} from "dropzone-frontend/lib/scripts/dropzone";
-import {DefaultDropzoneProps} from "../../dropzone-frontend/lib/scripts/model/dropzone-props";
+import {DefaultDropzoneProps} from "dropzone-frontend/lib/scripts/model/dropzone-props";
 
 const dropzone: Dropzone = new Dropzone(window.document.querySelector('#myDropzone'), new DefaultDropzoneProps(), {
   uploadProgressLabel: 'upload progress',

@@ -2,12 +2,27 @@ import {Dropzone} from './dropzone/dropzone';
 import {DropzoneFile} from './dropzone/model/dropzone-file';
 import {DefaultDropzoneProps} from './dropzone/model/dropzone-props';
 
-const dropzone: Dropzone = new Dropzone(window.document.querySelector('.m-dropzone'), new DefaultDropzoneProps(), {
+const dropzoneProps = new DefaultDropzoneProps();
+dropzoneProps.acceptedFileTypeSpecifiers = ['.pdf', 'video/*'];
+
+let dropzone: Dropzone = new Dropzone(window.document.querySelector('.m-dropzone--default'), dropzoneProps, {
     uploadProgressLabel: 'upload progress',
     uploadErrorLabel: 'upload error',
     uploadCompleteLabel: 'De upload is voltooid',
     browseLabel: 'browse.',
     dropFilesLabel: 'Sleep bestanden om bij te voegen of ',
+    invalidTypeText: 'Gelieve enkel pdf - bestanden bij te voegen.'
+});
+
+dropzone.destroy();
+
+dropzone = new Dropzone(window.document.querySelector('.m-dropzone--default'), dropzoneProps, {
+    uploadProgressLabel: 'upload progress',
+    uploadErrorLabel: 'upload error',
+    uploadCompleteLabel: 'De upload is voltooid',
+    browseLabel: 'browse.',
+    dropFilesLabel: 'Sleep bestanden om bij te voegen of ',
+    invalidTypeText: 'Gelieve enkel pdf - bestanden bij te voegen.'
 });
 
 dropzone.setReadonly(true);
@@ -123,7 +138,7 @@ const notAutoUploadOnDropDropzone: Dropzone = new Dropzone(
         uploadErrorLabel: 'upload error',
         uploadCompleteLabel: 'De upload is voltooid',
         browseLabel: 'browse.',
-        dropFilesLabel: 'Sleep bestanden om bij te voegen of ',
+        dropFilesLabel: 'Sleep bestanden om bij te voegen of '
     },
 );
 

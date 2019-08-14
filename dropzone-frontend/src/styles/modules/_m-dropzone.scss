@@ -7,6 +7,20 @@
     background: $dropzone-drag-in-progress-color;
   }
 
+  &.m-dropzone--invalid-type {
+    background: $dropzone-invalid-type-background-color;
+
+    .m-dropzone__text {
+      display: none;
+    }
+
+    .m-dropzone__invalid-type-text {
+      display: block;
+      text-align: center;
+      margin-bottom:  8px;
+    }
+  }
+
   &.m-dropzone--is-readonly {
     .m-dropzone__text {
       display: none;
@@ -33,6 +47,10 @@
   text-align: center;
   display: block;
   margin-bottom: 8px;
+}
+
+.m-dropzone__invalid-type-text {
+  display: none;
 }
 
 .m-dropzone__output-container {

@@ -11,9 +11,10 @@
 
 # Second release
 - configure dropppable, uploadable types?
-- features/no-auto-upload: Upload on client command
-    - write in readme
-    - finish on error handlers and so.
+- ~~features/no-auto-upload: Upload on client command~~
+    - ~~write in readme~~
+    - ~~finish on error handlers and so.~~
+- add links and stories in Readme?
 - provide a template way for adding the fileitem?
 - ~~promote i18n feature in readme~~ 
     - ~~change: upload is compleet => De upload is voltooid.~~
