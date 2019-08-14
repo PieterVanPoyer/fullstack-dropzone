@@ -3,6 +3,7 @@
   "rules": {
     "interface-name": false,
     "ordered-imports": false,
-    "member-ordering": false
+    "member-ordering": false,
+    "prefer-for-of": false
   }
 }
