@@ -4,6 +4,7 @@ import EventsEmitter from './event-emitter';
 import {DropzoneEvents} from './dropzone-events';
 import {DefaultI18nResource, DropzoneI18nResource} from './model/dropzone-i18n';
 import {DefaultDropzoneProps, DropzoneProps} from './model/dropzone-props';
+import {DropzoneUtils} from "./dropzone-utils";
 
 export class Dropzone extends EventsEmitter {
     public static DROPZONE_FILE_ID: number = 1;
@@ -374,39 +375,7 @@ export class Dropzone extends EventsEmitter {
             if (files && files.length) {
                 for (let i: number = 0; i < files.length; i++) {
                     const aFile = files[i];
-                    const extension = aFile.name.split('.').pop().toLowerCase();
-
-                    const acceptedFileTypeSpecification = this.acceptedFileTypeSpecifiers.find((anAcceptedFileType) => {
-                        if (anAcceptedFileType.indexOf('.') !== -1) { // indexOf . => check the extension
-                            if (anAcceptedFileType === '.' + extension) {
-                                return true;
-                            }
-                            return false;
-                        }
-                        if (anAcceptedFileType === 'video/*') { // it is */video
-                            if (aFile.type.indexOf('video/') !== -1) {
-                                return true;
-                            }
-                            return false;
-                        }
-                        if (anAcceptedFileType === 'audio/*') { // it is */video
-                            if (aFile.type.indexOf('audio/') !== -1) {
-                                return true;
-                            }
-                            return false;
-                        }
-                        if (anAcceptedFileType === 'image/*') { // it is */video
-                            if (aFile.type.indexOf('image/') !== -1) {
-                                return true;
-                            }
-                            return false;
-                        }
-
-                        // yet todo mimeType?
-                        return false;
-                    });
-
-                    if (!acceptedFileTypeSpecification) {
+                    if (!DropzoneUtils.isFileOfAnAcceptedFileTypeSpecifier(aFile, this.acceptedFileTypeSpecifiers)) {
                         return false;
                     }
                 }

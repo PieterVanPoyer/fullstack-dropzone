@@ -3,7 +3,8 @@ import {DropzoneFile} from './dropzone/model/dropzone-file';
 import {DefaultDropzoneProps} from './dropzone/model/dropzone-props';
 
 const dropzoneProps = new DefaultDropzoneProps();
-dropzoneProps.acceptedFileTypeSpecifiers = ['.pdf', 'video/*'];
+// dropzoneProps.acceptedFileTypeSpecifiers = ['.pdf', 'video/*', 'image/png'];
+dropzoneProps.acceptedFileTypeSpecifiers = ['application/pdf'];
 
 let dropzone: Dropzone = new Dropzone(window.document.querySelector('.m-dropzone--default'), dropzoneProps, {
     uploadProgressLabel: 'upload progress',

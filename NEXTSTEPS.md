@@ -11,6 +11,7 @@
 
 # Second release
 - configure dropppable, uploadable types?
+    - Is done? now publish it, and document it.
 - ~~features/no-auto-upload: Upload on client command~~
     - ~~write in readme~~
     - ~~finish on error handlers and so.~~

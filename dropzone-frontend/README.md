@@ -8,6 +8,7 @@ Turns an html5 - component in an amazing dropzone for fileupload.
 So, there are no strings attached to any backend technology. 
 - The dropzone can be populated with current state. It can be used for a readonly file output object.
 - i18n: you can add custom labels, or translate labels with the i18n dropzone resource.
+- configure the accepted droppable/uploadable types with fileTypeSpecifiers. ( https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#Unique_file_type_specifiers )
 - The current setup needs a scss compilation step.
 - can be used for uploading on drop, or deleting on delete pressed
 - can be used for uploading after an external trigger (for example a button press) 
@@ -315,3 +316,24 @@ document.querySelector('#saveNotUploadDropzoneButton').addEventListener('click',
     filesToSave = [];
 });
 ````
+
+#### configure accepted filetypes
+
+````
+import {DropzoneFile} from "dropzone-frontend/lib/scripts/model/dropzone-file";
+import {Dropzone} from "dropzone-frontend/lib/scripts/dropzone";
+import {DefaultDropzoneProps} from './dropzone/model/dropzone-props';
+
+const dropzoneProps = new DefaultDropzoneProps();
+// dropzoneProps.acceptedFileTypeSpecifiers = ['.pdf', 'video/*', 'image/png'];
+dropzoneProps.acceptedFileTypeSpecifiers = ['application/pdf'];
+
+let dropzone: Dropzone = new Dropzone(window.document.querySelector('.m-dropzone--default'), dropzoneProps, {
+    uploadProgressLabel: 'upload progress',
+    uploadErrorLabel: 'upload error',
+    uploadCompleteLabel: 'De upload is voltooid',
+    browseLabel: 'browse.',
+    dropFilesLabel: 'Sleep bestanden om bij te voegen of ',
+    invalidTypeText: 'Gelieve enkel pdf - bestanden bij te voegen.'
+});
+
