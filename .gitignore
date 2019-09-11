@@ -4,3 +4,4 @@ dropzone-express-server/api/uploads/**
 .idea/*
 dropzone-express-server/bin/*
 dropzone-frontend/lib/*
+dropzone-frontend/dist/*

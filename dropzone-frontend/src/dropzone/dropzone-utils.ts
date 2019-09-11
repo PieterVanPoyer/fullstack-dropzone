@@ -1,7 +1,7 @@
 
 export class DropzoneUtils {
 
-    static isFileOfAnAcceptedFileTypeSpecifier(file: File, acceptedFileTypeSpecifiers: string[]):boolean {
+    public static isFileOfAnAcceptedFileTypeSpecifier(file: File, acceptedFileTypeSpecifiers: string[]):boolean {
         const extension = file.name.split('.').pop().toLowerCase();
 
         const mimeType = file.type;
