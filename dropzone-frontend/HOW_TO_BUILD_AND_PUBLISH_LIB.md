@@ -6,8 +6,8 @@ working directory must be dropzone-frontend
     npm run build-lib
     npm version patch
     npm publish
-    cd..
     git add .
+    git commit -m "add a comment!"
     git push
 
 During the 'npm publish' the prettier runs and the tslint.
