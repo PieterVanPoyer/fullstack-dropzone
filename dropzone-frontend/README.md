@@ -12,6 +12,7 @@ So, there are no strings attached to any backend technology.
 - The current setup needs a scss compilation step.
 - can be used for uploading on drop, or deleting on delete pressed
 - can be used for uploading after an external trigger (for example a button press) 
+- IE11 support (include polyfills)
 
 ![dropzone-example-giffy](https://github.com/PieterVanPoyer/fullstack-dropzone/blob/master/dropzone-frontend/readme/dropzone-example.gif?raw=true)
 
@@ -336,4 +337,19 @@ let dropzone: Dropzone = new Dropzone(window.document.querySelector('.m-dropzone
     dropFilesLabel: 'Sleep bestanden om bij te voegen of ',
     invalidTypeText: 'Gelieve enkel pdf - bestanden bij te voegen.'
 });
+````
 
+#### IE11 support with polyfills
+
+You can make the dropzone work on IE11 with an array polyfill.
+
+For example install the polyfill package:
+``
+npm i core-js
+``
+
+And then include next polyfill.
+
+````
+import 'core-js/es/array';
+````

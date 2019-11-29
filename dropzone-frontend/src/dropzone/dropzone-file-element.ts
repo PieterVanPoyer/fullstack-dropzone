@@ -119,13 +119,17 @@ export class DropzoneFileElement extends EventsEmitter {
 
   private makeDownloadable() {
     this.outputElement.classList.add('m-dropzone-output--is-download-enabled');
-    this.outputElement.querySelectorAll('.js-dropzone-output-start-download').forEach(element => {
+    const startDownloadElements: NodeList = this.outputElement.querySelectorAll('.js-dropzone-output-start-download');
+
+    for (let i = 0; i < startDownloadElements.length; i++) {
+      // for easier IE11 support the NodeList is iterated with a indexed loop and not with forEach.
+      const element = startDownloadElements.item(i);
       element.addEventListener('click', event => {
         event.preventDefault();
         event.stopPropagation();
         this.emit(DropzoneEvents.DOWNLOAD_FILE, this.dropzoneFile);
       });
-    });
+    }
   }
 
   private makeDeletable() {

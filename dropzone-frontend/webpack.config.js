@@ -5,7 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
     mode: 'development',
-    entry: ['./src/main.ts', './src/styles/styles.scss'],
+    entry: ['./src/polyfills.ts', './src/main.ts', './src/styles/styles.scss'],
     devtool: 'inline-source-map',
     devServer: {
         contentBase: './dist'
