@@ -339,7 +339,7 @@ let dropzone: Dropzone = new Dropzone(window.document.querySelector('.m-dropzone
 });
 ````
 
-####IE11 support with polyfills
+#### IE11 support with polyfills
 
 You can make the dropzone work on IE11 with an array polyfill.
 
