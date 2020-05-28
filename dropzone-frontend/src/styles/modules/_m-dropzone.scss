@@ -22,14 +22,21 @@
   }
 
   &.m-dropzone--is-readonly {
+
     .m-dropzone__text {
       display: none;
     }
 
-
+    .m-dropzone-output.m-dropzone-output--is-deletable .m-dropzone-output__delete-button {
+      display: none;
+    }
 
     .m-dropzone-output.m-dropzone-output--is-deletable:hover .m-dropzone-output__delete-button {
       display: none;
+
+      @media only screen and (min-width: 768px) {
+        display: none;
+      }
     }
   }
 }

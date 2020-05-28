@@ -25,12 +25,26 @@
     }
   }
 
-  &.m-dropzone-output--is-deletable:hover {
+  &.m-dropzone-output--is-deletable {
 
     .m-dropzone-output__delete-button {
       cursor: pointer;
       display: block;
       padding: 4px;
+
+      @media only screen and (min-width: 768px) {
+        display: none;
+      }
+    }
+
+    &:hover {
+      @media only screen and (min-width: 768px) {
+        .m-dropzone-output__delete-button {
+          cursor: pointer;
+          display: block;
+          padding: 4px;
+        }
+      }
     }
   }
 

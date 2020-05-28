@@ -95,7 +95,7 @@ export class DropzoneFileElement extends EventsEmitter {
         return this.dropzoneFile.fileSizeInBytes + ' b';
       }
     } else {
-      return '0 b';
+      return '&nbsp;';
     }
   }
 
