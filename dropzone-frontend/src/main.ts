@@ -51,7 +51,7 @@ dropzone.addOnFileDroppedEventListener((file, successCallback, errorCallback, pr
   xhr.onerror = () => {
     console.log('** An error occurred during the transaction');
     errorCallback();
-    console.log('dropzoneFiles after error', dropzone.getDropzoneFiles())
+    console.log('dropzoneFiles after error', dropzone.getDropzoneFiles());
   };
   if (xhr.upload) {
     xhr.upload.onprogress = (e: any) => {

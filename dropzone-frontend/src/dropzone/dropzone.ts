@@ -230,12 +230,12 @@ export class Dropzone extends EventsEmitter {
 
   public getDropzoneFiles(): DropzoneFile[] {
     return this.filesForOutput
-        .filter((aDropzoneFileElement) => {
-          return !aDropzoneFileElement.isInUploadErrorState;
-        })
-        .map(aDropzoneFileElement => {
-          return aDropzoneFileElement.getDropzoneFile();
-        });
+      .filter(aDropzoneFileElement => {
+        return !aDropzoneFileElement.isInUploadErrorState;
+      })
+      .map(aDropzoneFileElement => {
+        return aDropzoneFileElement.getDropzoneFile();
+      });
   }
 
   public updateDropzoneFile(dropzoneFile: DropzoneFile): boolean {
