@@ -30,6 +30,7 @@ dropzone.setReadonly(true);
 dropzone.setReadonly(false);
 
 dropzone.addOnFileDroppedEventListener((file, successCallback, errorCallback, progress) => {
+  console.log('Nr of files in the dropzone', dropzone.getDropzoneFiles());
   const formData = new FormData();
   formData.append('file', file.file);
 
@@ -50,6 +51,7 @@ dropzone.addOnFileDroppedEventListener((file, successCallback, errorCallback, pr
   xhr.onerror = () => {
     console.log('** An error occurred during the transaction');
     errorCallback();
+    console.log('dropzoneFiles after error', dropzone.getDropzoneFiles())
   };
   if (xhr.upload) {
     xhr.upload.onprogress = (e: any) => {

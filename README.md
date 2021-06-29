@@ -26,3 +26,36 @@ run the app:
    or
    
    > npm start
+
+## Install the dropzone-frontend
+
+change directory:
+    > cd dropzone-frontend
+
+install dependencies:
+    > npm install
+
+## Run with reload the dropzone-frontend
+
+    > npm run start
+
+_Start your browser in insecure mode (to bypass cors issues)._
+
+Go to `http://localhost:8080/`
+
+> Make your changes, more info about building and publishing the lib can be found in [HOW_TO_BUILD_AND_PUBLISH_LIB](./dropzone-frontend/HOW_TO_BUILD_AND_PUBLISH_LIB.md).
+
+## After a new version
+
+### Install the dropzone-frontend-test-app
+
+change directory:
+> cd dropzone-frontend-test-app
+
+install dependencies:
+> npm install
+> npm upd dropzone-frontend
+
+### Run and test the new version
+
+> npm run start

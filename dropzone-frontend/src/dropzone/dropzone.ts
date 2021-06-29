@@ -229,9 +229,13 @@ export class Dropzone extends EventsEmitter {
   }
 
   public getDropzoneFiles(): DropzoneFile[] {
-    return this.filesForOutput.map(aDropzoneFileElement => {
-      return aDropzoneFileElement.getDropzoneFile();
-    });
+    return this.filesForOutput
+        .filter((aDropzoneFileElement) => {
+          return !aDropzoneFileElement.isInUploadErrorState;
+        })
+        .map(aDropzoneFileElement => {
+          return aDropzoneFileElement.getDropzoneFile();
+        });
   }
 
   public updateDropzoneFile(dropzoneFile: DropzoneFile): boolean {
@@ -315,8 +319,8 @@ export class Dropzone extends EventsEmitter {
       });
 
       fileToAppend.addOnRemoveDropzoneFileElementEventListener(() => {
-        fileToAppend.destroy();
-        this.outputDiv.removeChild(fileToAppend.getElement());
+        this.removeDropzoneFileElementFromModelArray(fileToAppend);
+        this.removeDropzoneFileElementFromOutputContainer(fileToAppend);
       });
     }
   }
