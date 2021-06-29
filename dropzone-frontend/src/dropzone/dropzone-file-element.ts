@@ -7,6 +7,7 @@ export class DropzoneFileElement extends EventsEmitter {
   private readonly element: HTMLDivElement;
   private readonly outputElement: HTMLDivElement;
   private readonly uploadStatusElement: HTMLDivElement;
+  public isInUploadErrorState: boolean;
 
   constructor(protected dropzoneFile: DropzoneFile, protected i18nResource: DropzoneI18nResource) {
     super();
@@ -145,6 +146,7 @@ export class DropzoneFileElement extends EventsEmitter {
   public handleUploadError(error: any): void {
     this.uploadStatusElement.classList.add('m-dropzone-upload-status--has-upload-error');
     this.uploadStatusElement.innerHTML = `<span class="m-dropzone-upload-status__upload-error">${this.i18nResource.uploadErrorLabel}</span>`;
+    this.isInUploadErrorState = true;
     setTimeout(() => {
       this.emit(DropzoneEvents.REMOVE_DROPZONE_FILE_ELEMENT);
     }, 6000);
