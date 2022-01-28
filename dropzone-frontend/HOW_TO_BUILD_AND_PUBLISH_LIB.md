@@ -5,6 +5,7 @@ working directory must be dropzone-frontend
 
     npm run build-lib
     npm version patch
+    npm login
     npm publish
     git add .
     git commit -m "add a comment!"
