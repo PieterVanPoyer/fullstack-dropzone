@@ -21,11 +21,12 @@ install dependencies:
 
 ## Run express backend
 run the app:
-   > SET DEBUG=dropzone-express-server:* & npm start
-   
-   or
    
    > npm start
+
+
+The debug doesn't seem to work anymore.
+   > SET DEBUG=dropzone-express-server:* & npm start 
 
 ## Install the dropzone-frontend
 
@@ -54,6 +55,7 @@ change directory:
 
 install dependencies:
 > npm install
+> 
 > npm upd dropzone-frontend
 
 ### Run and test the new version

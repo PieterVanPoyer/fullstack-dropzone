@@ -265,4 +265,4 @@ document.querySelector('#saveNotUploadDropzoneButton').addEventListener('click',
   filesToSave = [];
 });
 
-notAutoUploadOnDropDropzone.setReadonly(true);
+// notAutoUploadOnDropDropzone.setReadonly(true);
