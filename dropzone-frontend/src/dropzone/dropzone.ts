@@ -348,7 +348,7 @@ export class Dropzone extends EventsEmitter {
   }
 
   private removeDropzoneFileElementFromModelArray(element: DropzoneFileElement) {
-    this.filesForOutput.splice(this.filesForOutput.indexOf(element, 1));
+    this.filesForOutput.splice(this.filesForOutput.indexOf(element), 1);
   }
 
   private handleDeleteErrorForFile(dropzoneFile: DropzoneFile, error: any): void {
